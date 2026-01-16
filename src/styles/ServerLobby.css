@@ -1,0 +1,60 @@
+.server-lobby {
+  display: flex;
+  height: 100vh;
+  background-color: #313338;
+  color: #dbdee1;
+}
+
+.channel-sidebar {
+  width: 260px;
+  background-color: #2b2d31;
+  display: flex;
+  flex-direction: column;
+}
+
+.server-header {
+  padding: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #1e1f22;
+}
+
+.channel-list {
+  padding: 8px;
+  flex: 1;
+}
+
+.channel-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #949ba4;
+}
+
+.channel-item:hover {
+  background-color: #3f4147;
+  color: #dbdee1;
+}
+
+.channel-item.active {
+  background-color: #404249;
+  color: #ffffff;
+}
+
+.channel-prefix {
+  margin-right: 6px;
+}
+
+.channel-content {
+  flex: 1;
+  background-color: #313338;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.channel-placeholder {
+  color: #949ba4;
+  font-size: 18px;
+}

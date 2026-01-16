@@ -1,21 +1,60 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./auth/Login";
-import Servers from "./pages/Servers";
-import RequireAuth from "./auth/RequireAuth";
-import Register from "./pages/Register";
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import ServerListPage from "./pages/ServerListPage";
+import ServerLobby from "./pages/ServerLobby";
 
-export default function App() {
+const isAuthenticated = () => {
+  return !!localStorage.getItem("accessToken");
+};
+
+// 🔒 인증 보호 라우트
+const PrivateRoute = ({ children }) => {
+  return isAuthenticated() ? children : <Navigate to="/login" replace />;
+};
+
+function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        {/* 🔓 Public */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        {/* 🔒 Private */}
+        <Route
+          path="/servers"
+          element={
+            <PrivateRoute>
+              <ServerListPage />
+            </PrivateRoute>
+          }
+        />
 
         <Route
-          path="/servers" element={<RequireAuth><Servers /></RequireAuth>
+          path="/servers/:serverId"
+          element={
+            <PrivateRoute>
+              <ServerLobby />
+            </PrivateRoute>
+          }
+        />
+
+        {/* 기본 진입 */}
+        <Route
+          path="/"
+          element={
+            isAuthenticated() ? (
+              <Navigate to="/servers" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
       </Routes>
     </BrowserRouter>
   );
 }
+
+export default App;
