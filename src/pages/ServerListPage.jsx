@@ -1,44 +1,40 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../api/api";
-import "../styles/ServerListPage.css";
+import CreateServerModal from "../components/CreateServerModal";
+import "../styles/ServerListPage.css"
 
-const ServerListPage = () => {
+export default function ServerListPage() {
   const [servers, setServers] = useState([]);
-  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    api.get("/servers/me")
-      .then(res => setServers(res.data))
-      .catch(err => console.error(err));
+    api.get("/servers/me").then((res) => {
+      setServers(res.data);
+    });
   }, []);
 
-  const handleServerClick = (serverId) => {
-    navigate(`/servers/${serverId}`);
-  };
-
   return (
-    <div className="server-list-container">
-      <div className="server-list">
-        {servers.map(server => (
-          <div
-            key={server.id}
-            className="server-icon"
-            onClick={() => handleServerClick(server.id)}
-            title={server.name}
-          >
-            {server.iconUrl ? (
-              <img src={server.iconUrl} alt={server.name} />
-            ) : (
-              <span>{server.name.charAt(0)}</span>
-            )}
+    <div className="layout">
+      <aside className="server-sidebar">
+        {servers.map((s) => (
+          <div key={s.id} className="server-icon">
+            {s.name[0]}
           </div>
         ))}
 
-        <div className="server-icon add-server">+</div>
-      </div>
+        <div className="server-add" onClick={() => setOpen(true)}>
+          +
+        </div>
+      </aside>
+
+      {open && (
+        <CreateServerModal
+          onClose={() => setOpen(false)}
+          onCreated={(server) =>
+            setServers((prev) => [...prev, server])
+          }
+        />
+      )}
     </div>
   );
-};
-
-export default ServerListPage;
+}

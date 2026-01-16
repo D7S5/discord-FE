@@ -22,7 +22,7 @@ export default function Login() {
         email,
         password,
       });
-      localStorage.setItem("userId", res.data.userId);
+      // localStorage.setItem("userId", res.data.userId);
       localStorage.setItem("accessToken", res.data.accessToken);
       navigate("/servers");
     } catch (err) {

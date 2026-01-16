@@ -2,19 +2,22 @@ import { useState } from "react";
 import api from "../api/api";
 import "../styles/CreateServerModal.css";
 
-export default function CreateServerModal({ onClose }) {
+export default function CreateServerModal({ onClose, onCreated }) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleCreate = async () => {
-    if (!name.trim()) return;
+    if (!name.trim()) {
+      alert("서버 이름을 입력하세요");
+      return;
+    }
 
-    setLoading(true);
     try {
-      await api.post("/servers", { name });
+      setLoading(true);
+      const res = await api.post("/servers", { name });
+      onCreated(res.data);
       onClose();
-      window.location.reload();
-    } catch {
+    } catch (e) {
       alert("서버 생성 실패");
     } finally {
       setLoading(false);
@@ -22,29 +25,29 @@ export default function CreateServerModal({ onClose }) {
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="modal-backdrop">
       <div className="modal">
-        <h2>서버 만들기</h2>
-        <p>친구들과 대화할 서버를 생성하세요</p>
+        <h3 className="modal-title">서버 만들기</h3>
 
         <input
-          className="modal-input"
-          placeholder="서버 이름"
+          className="server-input"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          placeholder="서버 이름"
         />
 
-        <button
-          className="btn btn-primary"
-          disabled={loading}
-          onClick={handleCreate}
-        >
-          {loading ? "생성 중..." : "생성"}
-        </button>
-
-        <button className="btn btn-link" onClick={onClose}>
-          취소
-        </button>
+        <div className="modal-actions">
+          <button className="btn cancel" onClick={onClose}>
+            취소
+          </button>
+          <button
+            className="btn create"
+            onClick={handleCreate}
+            disabled={loading}
+          >
+            {loading ? "생성 중..." : "생성"}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,32 +1,35 @@
-.server-list-container {
-  width: 72px;
-  background: #1e1f22;
+.layout {
+  display: flex;
   height: 100vh;
+  background: #313338;
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
-.server-list {
+.server-sidebar {
+  width: 72px;
+  background: #1e1f22;
+  padding: 12px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 12px;
-  gap: 12px;
 }
 
+/* 서버 아이콘 */
 .server-icon {
   width: 48px;
   height: 48px;
-  background: #313338;
   border-radius: 50%;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-
+  background: #313338;
+  color: #dbdee1;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  transition: border-radius 0.2s, background 0.2s;
+  margin-bottom: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 
+    border-radius 0.2s ease,
+    background 0.2s ease;
 }
 
 .server-icon:hover {
@@ -34,19 +37,26 @@
   background: #5865f2;
 }
 
-.server-icon img {
-  width: 100%;
-  height: 100%;
+/* 서버 추가 버튼 */
+.server-add {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-}
-
-.add-server {
   background: #313338;
-  color: #3ba55d;
+  color: #23a559;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 28px;
+  cursor: pointer;
+  transition: 
+    border-radius 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
-.add-server:hover {
-  background: #3ba55d;
+.server-add:hover {
+  border-radius: 16px;
+  background: #23a559;
   color: white;
 }
