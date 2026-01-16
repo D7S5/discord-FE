@@ -1,0 +1,26 @@
+:root {
+  --bg-main: #313338;
+  --bg-secondary: #1e1f22;
+  --bg-card: #2b2d31;
+
+  --color-text: #dbdee1;
+  --color-muted: #949ba4;
+
+  --primary: #5865f2;
+  --primary-hover: #4752c4;
+  --danger: #ed4245;
+
+  --radius: 8px;
+  --font-main: "Inter", "Noto Sans KR", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-main);
+  color: var(--color-text);
+  font-family: var(--font-main);
+}

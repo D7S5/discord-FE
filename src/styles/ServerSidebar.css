@@ -1,0 +1,40 @@
+.server-sidebar {
+  width: 72px;
+  background-color: var(--bg-secondary);
+  height: 100vh;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.server-icon {
+  width: 48px;
+  height: 48px;
+  background-color: var(--bg-card);
+  border-radius: 50%;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-radius 0.2s, background 0.2s;
+}
+
+.server-icon:hover {
+  border-radius: 16px;
+  background-color: var(--primary);
+}
+
+.server-icon.add {
+  background-color: transparent;
+  border: 2px dashed #4f545c;
+  color: #4f545c;
+}
+
+.server-icon.add:hover {
+  background-color: var(--primary);
+  border: none;
+  color: white;
+}

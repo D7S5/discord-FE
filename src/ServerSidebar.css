@@ -1,0 +1,27 @@
+.server-sidebar {
+  width: 72px;
+  background-color: var(--bg-secondary);
+  height: 100vh;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.server-icon {
+  width: 48px;
+  height: 48px;
+  background-color: var(--bg-card);
+  border-radius: 50%;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-radius 0.2s, background 0.2s;
+}
+
+.server-icon:hover {
+  border-radius: 16px;
+  background-color: var(--primary);
+}
