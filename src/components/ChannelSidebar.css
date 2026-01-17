@@ -1,0 +1,46 @@
+.channel-sidebar {
+  width: 240px;
+  background: #2b2d31;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 서버 이름 헤더 */
+.server-header {
+  height: 48px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  border-bottom: 1px solid #1f2023;
+}
+
+/* 채널 그룹 */
+.channel-group {
+  padding: 8px;
+}
+
+.channel-group-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b5bac1;
+  margin-bottom: 6px;
+}
+
+/* 채널 */
+.channel-item {
+  padding: 6px 8px;
+  border-radius: 4px;
+  color: #b5bac1;
+  cursor: pointer;
+}
+
+.channel-item:hover {
+  background: #393c41;
+  color: #dbdee1;
+}
+
+.channel-item.active {
+  background: #404249;
+  color: white;
+}

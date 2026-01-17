@@ -1,0 +1,8 @@
+.server-layout {
+  flex: 1;
+  display: flex;
+  height: 100vh;
+  background: #313338;
+  color: #dbdee1;
+  overflow: hidden;
+}

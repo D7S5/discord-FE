@@ -1,0 +1,80 @@
+.member-list {
+  width: 240px;
+  background: #2b2d31;
+  padding: 12px 8px;
+  overflow-y: auto;
+  color: #dbdee1;
+  font-size: 14px;
+}
+
+/* 그룹 제목 */
+.member-group {
+  margin-bottom: 16px;
+}
+
+.member-group-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b5bac1;
+  padding: 4px 8px;
+  text-transform: uppercase;
+}
+
+/* 멤버 아이템 */
+.member-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.member-item:hover {
+  background: #393c41;
+}
+
+.member-item.offline {
+  opacity: 0.5;
+}
+
+/* 아바타 */
+.avatar {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #5865f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+}
+
+/* 상태 점 */
+.status {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #2b2d31;
+}
+
+.status.online {
+  background: #23a559;
+}
+
+.status.offline {
+  background: #80848e;
+}
+
+/* 닉네임 */
+.username {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
