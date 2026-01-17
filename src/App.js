@@ -24,7 +24,7 @@ function App() {
 
         {/* 🔒 Private */}
         <Route
-          path="/servers"
+          path="/channels"
           element={
             <PrivateRoute>
               <ServerListPage />
@@ -33,7 +33,7 @@ function App() {
         />
 
         <Route
-          path="/servers/:serverId"
+          path="/channels/:serverId"
           element={
             <PrivateRoute>
               <ServerLobby />
