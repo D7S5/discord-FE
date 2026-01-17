@@ -1,28 +1,23 @@
-import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ServerListPage from "./pages/ServerListPage";
-import ServerLobby from "./pages/ServerLobby";
+import ServerLayoutPage from "./pages/ServerLayoutPage";
 
-const isAuthenticated = () => {
-  return !!localStorage.getItem("accessToken");
-};
+const isAuthenticated = () => !!localStorage.getItem("accessToken");
 
-// 🔒 인증 보호 라우트
-const PrivateRoute = ({ children }) => {
-  return isAuthenticated() ? children : <Navigate to="/login" replace />;
-};
+const PrivateRoute = ({ children }) =>
+  isAuthenticated() ? children : <Navigate to="/login" replace />;
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 🔓 Public */}
+        {/* Public */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* 🔒 Private */}
+        {/* 서버 목록 */}
         <Route
           path="/channels"
           element={
@@ -32,11 +27,12 @@ function App() {
           }
         />
 
+        {/* 서버 + 채널 (디스코드 핵심) */}
         <Route
-          path="/channels/:serverId"
+          path="/channels/:serverId/*"
           element={
             <PrivateRoute>
-              <ServerLobby />
+              <ServerLayoutPage />
             </PrivateRoute>
           }
         />
@@ -45,11 +41,9 @@ function App() {
         <Route
           path="/"
           element={
-            isAuthenticated() ? (
-              <Navigate to="/servers" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
+            isAuthenticated()
+              ? <Navigate to="/channels" replace />
+              : <Navigate to="/login" replace />
           }
         />
       </Routes>

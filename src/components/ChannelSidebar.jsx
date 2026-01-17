@@ -1,18 +1,22 @@
-import "./ChannelSidebar.css";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function ChannelSidebar() {
+export default function ChannelSidebar({ channels = [] }) {
+  const navigate = useNavigate();
+  const { serverId } = useParams();
+
   return (
     <aside className="channel-sidebar">
-      <div className="server-header">
-        <span className="server-name">My Server</span>
-      </div>
-
-      <div className="channel-group">
-        <div className="channel-group-title">TEXT CHANNELS</div>
-
-        <div className="channel-item active"># general</div>
-        <div className="channel-item"># random</div>
-      </div>
+      {channels.map((c) => (
+        <div
+          key={c.id}
+          className="channel-item"
+          onClick={() =>
+            navigate(`/channels/${serverId}/${c.id}`)
+          }
+        >
+          # {c.name}
+        </div>
+      ))}
     </aside>
   );
 }

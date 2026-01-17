@@ -4,17 +4,17 @@ import {
   subscribeChannel,
   sendMessage,
 } from "../websocket";
-import api from "../api/api";
+import api from "../api";
 
-export default function ChatArea({ channelId, user }) {
+export default function ChatArea({ serverId ,channelId, user }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    if (!channelId) return;
+    if (!channelId || !serverId) return;
 
     // 히스토리 로딩
-    api.get(`/channels/${channelId}/messages`)
+    api.get(`/channels/${serverId}/${channelId}/messages`)
     .then(res => setMessages(res.data));
 
 

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/api";
+import api from "../api";
 
 const ServerSidebar = () => {
   const [servers, setServers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get("/servers/me")
+    api.get("/channels/me")
       .then(res => {
         console.log(res.data);
         setServers(res.data);
@@ -20,7 +20,7 @@ const ServerSidebar = () => {
         servers.map(server => (
           <div
             key={server.id}
-            onClick={() => navigate(`/servers/${server.id}`)}
+            onClick={() => navigate(`/channels/${server.id}`)}
           >
             {server.name}
           </div>

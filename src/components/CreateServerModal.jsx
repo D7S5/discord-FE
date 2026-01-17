@@ -1,10 +1,12 @@
 import { useState } from "react";
-import api from "../api/api";
+import api from "../api";
 import "../styles/CreateServerModal.css";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateServerModal({ onClose, onCreated }) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleCreate = async () => {
     if (!name.trim()) {
@@ -14,9 +16,14 @@ export default function CreateServerModal({ onClose, onCreated }) {
 
     try {
       setLoading(true);
-      const res = await api.post("/servers", { name });
+      const res = await api.post("/channels", { name });
       onCreated(res.data);
       onClose();
+      
+      const serverId = res.data.id;
+
+      // 생성 직후 해당 서버로 이동
+      navigate(`/channels/${serverId}`);
     } catch (e) {
       alert("서버 생성 실패");
     } finally {
