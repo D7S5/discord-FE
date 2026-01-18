@@ -3,7 +3,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ServerListPage from "./pages/ServerListPage";
 import ServerLayoutPage from "./pages/ServerLayoutPage";
-
+import ServerLobby from "./pages/ServerLobby";
 const isAuthenticated = () => !!localStorage.getItem("accessToken");
 
 const PrivateRoute = ({ children }) =>
@@ -26,16 +26,23 @@ function App() {
             </PrivateRoute>
           }
         />
-
-        {/* 서버 + 채널 (디스코드 핵심) */}
         <Route
+          path="/channels/:serverId/*"
+          element={
+            <PrivateRoute>
+              <ServerLobby />
+            </PrivateRoute>
+          }
+        />
+        {/* 서버 + 채널 (디스코드 핵심) */}
+        {/* <Route
           path="/channels/:serverId/*"
           element={
             <PrivateRoute>
               <ServerLayoutPage />
             </PrivateRoute>
           }
-        />
+        /> */}
 
         {/* 기본 진입 */}
         <Route

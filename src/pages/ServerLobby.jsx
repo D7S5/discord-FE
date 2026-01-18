@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getServerLobby } from "../api/serverApi";
 import ChannelItem from "../components/ChannelItem";
 import "../styles/ServerLobby.css";
 import ChannelPage from "./ChannelPage";
 
+
 const ServerLobby = () => {
-  const { serverId } = useParams();
+  const { serverId, channelId } = useParams();
   const [server, setServer] = useState(null);
   const [channels, setChannels] = useState([]);
-  const [selectedChannelId, setSelectedChannelId] = useState(null);
+  const navigate = useNavigate();
+  const selectedChannelId = channelId ? Number(channelId) : null;
 
   useEffect(() => {
     getServerLobby(serverId).then((data) => {
@@ -17,8 +19,11 @@ const ServerLobby = () => {
       setChannels(data.channels);
 
       // ✅ 첫 채널 자동 선택
-      if (data.channels.length > 0) {
-        setSelectedChannelId(data.channels[0].id);
+      if (!channelId && data.channels.length > 0) {
+        navigate(
+          `/channels/${serverId}/${data.channels[0].id}`,
+          { replace: true }
+        );
       }
     });
   }, [serverId]);
@@ -35,11 +40,13 @@ const ServerLobby = () => {
         <div className="channel-list">
           {channels.map((channel) => (
             <ChannelItem
-              key={channel.id}
-              channel={channel}
-              selected={channel.id === selectedChannelId}
-              onClick={() => setSelectedChannelId(channel.id)}
-            />
+                key={channel.id}
+                channel={channel}
+                selected={channel.id === selectedChannelId}
+                onClick={() =>
+                    navigate(`/channels/${serverId}/${channel.id}`)
+                }
+                />
           ))}
         </div>
       </aside>

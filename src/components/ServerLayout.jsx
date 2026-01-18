@@ -3,10 +3,10 @@ import ChannelSidebar from "./ChannelSidebar";
 import ChatArea from "./ChatArea";
 import MemberList from "./MemberList";
 
-export default function ServerLayout({ members }) {
+export default function ServerLayout({ channels, members }) {
   return (
     <div className="server-layout">
-      <ChannelSidebar />
+      <ChannelSidebar channels={channels}/>
       <ChatArea />
       <MemberList members={members} />
     </div>

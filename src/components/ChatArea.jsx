@@ -17,7 +17,6 @@ export default function ChatArea({ serverId ,channelId, user }) {
     api.get(`/channels/${serverId}/${channelId}/messages`)
     .then(res => setMessages(res.data));
 
-
     connectWebSocket();
     subscribeChannel(channelId, (msg) => {
       setMessages((prev) => [...prev, msg]);

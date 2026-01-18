@@ -17,6 +17,7 @@ export default function ServerLayoutPage() {
       setMembers(res.data.members);
       setLoaded(true);
     });
+    
   }, [serverId]);
 
   // ✅ 서버 진입 시 첫 채널 자동 이동
