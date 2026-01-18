@@ -10,6 +10,10 @@ export const connectWebSocket = (onConnect) => {
     webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
     reconnectDelay: 5000,
     onConnect,
+    
+    connectHeaders: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+  },
   });
 
   client.activate();

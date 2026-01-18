@@ -5,8 +5,9 @@ import {
   sendSocketMessage
 } from "../websocket";
 import "../styles/ChannelPage.css";
+import api from "../api";
 
-export default function ChannelPage({ channelId }) {
+export default function ChannelPage({ channel }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const bottomRef = useRef(null);
@@ -14,29 +15,29 @@ export default function ChannelPage({ channelId }) {
 
   /* ✅ 1. 채널 변경 시 과거 메시지 로딩 */
   useEffect(() => {
-    if (!channelId) return;
-
-    fetch(`/api/channels/${channelId}/messages`)
-      .then(res => res.json())
-      .then(setMessages);
-  }, [channelId]);
-
+    if (!channel) return;
+    api.get(`/channels/${channel.id}/messages`)
+      .then((res) => {
+        setMessages(res.data);
+      })
+      .catch((err) => {
+        console.error("메시지 불러오기 실패", err);
+      });
+  }, [channel]);
   /* ✅ 2. WebSocket 연결 + 구독 */
   useEffect(() => {
-    if (!channelId) return;
+    if (!channel) return;
 
     connectWebSocket(() => {
-      subscriptionRef.current = subscribeChannel(channelId, (msg) => {
+      subscriptionRef.current = subscribeChannel(channel.id, (msg) => {
         setMessages(prev => [...prev, msg]);
       });
     });
 
-    console.log("channelId prop:", channelId);
-
     return () => {
       subscriptionRef.current?.unsubscribe();
     };
-  }, [channelId]);
+  }, [channel]);
 
   /* ✅ 3. 자동 스크롤 */
   useEffect(() => {
@@ -47,11 +48,11 @@ export default function ChannelPage({ channelId }) {
   const sendMessage = () => {
     if (!input.trim()) return;
 
-    sendSocketMessage(channelId, input);
+    sendSocketMessage(channel.id, input);
     setInput("");
   };
 
-  if (!channelId) {
+  if (!channel) {
     return <div className="empty-channel"></div>;
   }
 
@@ -59,7 +60,7 @@ export default function ChannelPage({ channelId }) {
     <div className="channel-page">
       {/* 채널 헤더 */}
       <div className="channel-header">
-        <span># Channel {channelId}</span>
+        <span># {channel.name}</span>
       </div>
 
       {/* 메시지 리스트 */}

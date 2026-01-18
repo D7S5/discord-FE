@@ -12,6 +12,9 @@ const ServerLobby = () => {
   const [channels, setChannels] = useState([]);
   const navigate = useNavigate();
   const selectedChannelId = channelId ? Number(channelId) : null;
+  const selectedChannel = channels.find(
+  (c) => c.id === selectedChannelId
+);
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
@@ -55,10 +58,9 @@ const ServerLobby = () => {
       </aside>
 
       <main className="channel-content">
-        <ChannelPage channelId={selectedChannelId} />
-        {selectedChannelId ? (
+        <ChannelPage channel={selectedChannel} />
+        {selectedChannel  ? (
           <div className="channel-placeholder">
-            Channel ID: {selectedChannelId}
           </div>
         ) : (
           <div className="channel-placeholder">채널을 선택하세요</div>
