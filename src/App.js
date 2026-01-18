@@ -27,7 +27,15 @@ function App() {
           }
         />
         <Route
-          path="/channels/:serverId/*"
+          path="/channels/:serverId"
+          element={
+            <PrivateRoute>
+              <ServerLobby />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/channels/:serverId/:channelId"
           element={
             <PrivateRoute>
               <ServerLobby />

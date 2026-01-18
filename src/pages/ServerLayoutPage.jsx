@@ -25,7 +25,7 @@ export default function ServerLayoutPage() {
     if (!loaded || channels.length === 0) return;
 
     const path = window.location.pathname;
-    if (path.split("/").length >= 4) return; // 이미 channelId 있음
+    if (path.split("/").length >= 4) return;
 
     navigate(`${channels[0].id}`, { replace: true });
   }, [loaded, channels, navigate]);

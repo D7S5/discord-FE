@@ -4,7 +4,7 @@ import { getServerLobby } from "../api/serverApi";
 import ChannelItem from "../components/ChannelItem";
 import "../styles/ServerLobby.css";
 import ChannelPage from "./ChannelPage";
-
+import MemberList from "../components/MemberList";
 
 const ServerLobby = () => {
   const { serverId, channelId } = useParams();
@@ -12,11 +12,13 @@ const ServerLobby = () => {
   const [channels, setChannels] = useState([]);
   const navigate = useNavigate();
   const selectedChannelId = channelId ? Number(channelId) : null;
+  const [members, setMembers] = useState([]);
 
   useEffect(() => {
     getServerLobby(serverId).then((data) => {
       setServer(data.server);
       setChannels(data.channels);
+      setMembers(data.members || []);
 
       // ✅ 첫 채널 자동 선택
       if (!channelId && data.channels.length > 0) {
@@ -25,8 +27,9 @@ const ServerLobby = () => {
           { replace: true }
         );
       }
+      console.log("channelId from params:", channelId);
     });
-  }, [serverId]);
+  }, [serverId, channelId]);
 
   if (!server) return <div className="loading">Loading...</div>;
 
@@ -61,7 +64,9 @@ const ServerLobby = () => {
           <div className="channel-placeholder">채널을 선택하세요</div>
         )}
       </main>
+      <MemberList members={members} />
     </div>
+    
   );
 };
 

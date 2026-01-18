@@ -50,8 +50,8 @@
   flex: 1;
   background-color: #313338;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center;
+  justify-content: center; */
 }
 
 .channel-placeholder {

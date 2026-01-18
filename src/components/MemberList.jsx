@@ -1,34 +1,72 @@
 import "./MemberList.css";
 
-export default function MemberList({ members }) {
+const ROLE_ORDER = ["OWNER", "ADMIN", "MEMBER"];
+const ROLE_LABEL = {
+  OWNER: "👑 OWNER",
+  ADMIN: "🛡 ADMIN",
+  MEMBER: "👤 MEMBER",
+};
+
+export default function MemberList({ members = [] }) {
+  const onlineMembers = members.filter(m => m.online);
+  const offlineMembers = members.filter(m => !m.online);
+
   return (
     <aside className="member-list">
-      <div className="member-group">
-        <div className="member-group-title">
-          온라인 — {members.filter(m => m.online).length}
-        </div>
+      {/* 온라인 */}
+      <MemberSection
+        title={`온라인 — ${onlineMembers.length}`}
+        members={onlineMembers}
+      />
 
-        {members
-          .filter(m => m.online)
-          .map(m => (
-            <MemberItem key={m.id} member={m} />
-          ))}
-      </div>
-
-      <div className="member-group">
-        <div className="member-group-title">
-          오프라인 — {members.filter(m => !m.online).length}
-        </div>
-
-        {members
-          .filter(m => !m.online)
-          .map(m => (
-            <MemberItem key={m.id} member={m} offline />
-          ))}
-      </div>
+      {/* 오프라인 */}
+      <MemberSection
+        title={`오프라인 — ${offlineMembers.length}`}
+        members={offlineMembers}
+        offline
+      />
     </aside>
   );
 }
+
+/* ===================== */
+/* Section by Role       */
+/* ===================== */
+
+function MemberSection({ title, members, offline }) {
+  const grouped = ROLE_ORDER.reduce((acc, role) => {
+    acc[role] = members.filter(m => m.role === role);
+    return acc;
+  }, {});
+
+  return (
+    <div className="member-group">
+      <div className="member-group-title">{title}</div>
+
+      {ROLE_ORDER.map(role =>
+        grouped[role].length > 0 ? (
+          <div key={role} className="member-role-group">
+            <div className="member-role-title">
+              {ROLE_LABEL[role]} — {grouped[role].length}
+            </div>
+
+            {grouped[role].map(member => (
+              <MemberItem
+                key={member.id}
+                member={member}
+                offline={offline}
+              />
+            ))}
+          </div>
+        ) : null
+      )}
+    </div>
+  );
+}
+
+/* ===================== */
+/* Member Item           */
+/* ===================== */
 
 function MemberItem({ member, offline }) {
   return (

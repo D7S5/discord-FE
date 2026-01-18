@@ -1,29 +1,34 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-let client = null;
+let client;
 
-export const connectWebSocket = (onMessage) => {
+export const connectWebSocket = (onConnect) => {
+  if (client && client.connected) return;
+
   client = new Client({
     webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
     reconnectDelay: 5000,
-    onConnect: () => {
-      console.log("WebSocket Connected");
-    },
+    onConnect,
   });
 
   client.activate();
 };
 
 export const subscribeChannel = (channelId, callback) => {
-  client.subscribe(`/topic/channels/${channelId}`, (msg) => {
-    callback(JSON.parse(msg.body));
-  });
+  if (!client) return;
+
+  return client.subscribe(
+    `/topic/channels/${channelId}`,
+    (msg) => callback(JSON.parse(msg.body))
+  );
 };
 
-export const sendMessage = (message) => {
+export const sendSocketMessage = (channelId, content) => {
+  if (!client) return;
+
   client.publish({
-    destination: "/app/chat.send",
-    body: JSON.stringify(message),
+    destination: `/app/channels/${channelId}/messages`,
+    body: JSON.stringify({ content }),
   });
 };
