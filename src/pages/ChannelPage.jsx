@@ -1,21 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
   connectWebSocket,
-  subscribeChannel,
-  sendSocketMessage
+  getClient
 } from "../websocket";
 import "../styles/ChannelPage.css";
 import api from "../api";
 
 export default function ChannelPage({ channel }) {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+  const [content, setContent] = useState("");
   const bottomRef = useRef(null);
   const subscriptionRef = useRef(null);
 
-  /* ✅ 1. 채널 변경 시 과거 메시지 로딩 */
   useEffect(() => {
     if (!channel) return;
+    
     api.get(`/channels/${channel.id}/messages`)
       .then((res) => {
         setMessages(res.data);
@@ -24,34 +23,50 @@ export default function ChannelPage({ channel }) {
         console.error("메시지 불러오기 실패", err);
       });
   }, [channel]);
-  /* ✅ 2. WebSocket 연결 + 구독 */
+
   useEffect(() => {
     if (!channel) return;
 
     connectWebSocket(() => {
-      subscriptionRef.current = subscribeChannel(channel.id, (msg) => {
-        setMessages(prev => [...prev, msg]);
-      });
-    });
+      const client = getClient();
+      if (!client) return;
 
+      subscriptionRef.current?.unsubscribe();
+
+      subscriptionRef.current = client.subscribe(
+        `/topic/channels/${channel.id}`,
+        (msg) => {
+          const body = JSON.parse(msg.body);
+          setMessages(prev => [...prev, body]);
+        }
+      );
+    });
     return () => {
       subscriptionRef.current?.unsubscribe();
-    };
-  }, [channel]);
+      subscriptionRef.current = null;
+    }
+  }, [channel.id]);
 
-  /* ✅ 3. 자동 스크롤 */
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  /* ✅ 4. 메시지 전송 */
   const sendMessage = () => {
-    if (!input.trim()) return;
+    if (!content.trim() || !channel) return;
 
-    sendSocketMessage(channel.id, input);
-    setInput("");
+    const client = getClient();
+    if (!client || !client.connected) {
+      console.warn("STOMP not connected");
+      return;
+    }
+
+    client.publish({
+      destination: `/app/channels/${channel.id}/messages`,
+      body: JSON.stringify({ content }),
+    });
+
+    setContent("");
   };
-
   if (!channel) {
     return <div className="empty-channel"></div>;
   }
@@ -74,8 +89,8 @@ export default function ChannelPage({ channel }) {
       {/* 입력창 */}
       <div className="message-input">
         <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
+          value={content}
+          onChange={e => setContent(e.target.value)}
           onKeyDown={e => e.key === "Enter" && sendMessage()}
           placeholder="메시지를 입력하세요"
         />
@@ -87,7 +102,7 @@ export default function ChannelPage({ channel }) {
 function MessageItem({ message }) {
   return (
     <div className="message-item">
-      <span className="author">{message.sender}</span>
+      <span className="author">{message.senderName}</span>
       <span className="content">{message.content}</span>
     </div>
   );

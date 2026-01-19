@@ -5,6 +5,7 @@ import ChannelItem from "../components/ChannelItem";
 import "../styles/ServerLobby.css";
 import ChannelPage from "./ChannelPage";
 import MemberList from "../components/MemberList";
+import { connectWebSocket, getClient } from "../websocket";
 
 const ServerLobby = () => {
   const { serverId, channelId } = useParams();
@@ -16,6 +17,13 @@ const ServerLobby = () => {
   (c) => c.id === selectedChannelId
 );
   const [members, setMembers] = useState([]);
+
+  useEffect(() => {
+  connectWebSocket(() => {
+    console.log("WebSocket connected (ServerLobby)");
+    console.log("connected =", getClient()?.connected);
+  });
+  }, []);
 
   useEffect(() => {
     getServerLobby(serverId).then((data) => {

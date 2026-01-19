@@ -1,38 +1,56 @@
+// websocket.js
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-let client;
+let client = null;
+let connectCallbacks = [];
+let activating = false;
 
 export const connectWebSocket = (onConnect) => {
-  if (client && client.connected) return;
+  console.log("connectWebSocket CALLED");
+
+  if (onConnect) {
+    connectCallbacks.push(onConnect);
+  }
+
+  // 이미 연결돼 있으면 즉시 콜백 실행
+  if (client?.connected) {
+    connectCallbacks.forEach(cb => cb());
+    connectCallbacks = [];
+    return;
+  }
+
+  // 이미 연결 시도 중이면 기다림
+  if (activating) return;
+
+  activating = true;
 
   client = new Client({
     webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
-    reconnectDelay: 5000,
-    onConnect,
     
     connectHeaders: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
   },
+    reconnectDelay: 5000,
+
+    onConnect: () => {
+      console.log("✅ STOMP connected");
+      activating = false;
+      connectCallbacks.forEach(cb => cb());
+      connectCallbacks = [];
+    },
+
+    onWebSocketClose: () => {
+      console.warn("⚠️ WebSocket closed");
+      activating = false;
+    },
+
+    onStompError: (frame) => {
+      console.error("❌ STOMP error", frame);
+    },
   });
 
   client.activate();
 };
 
-export const subscribeChannel = (channelId, callback) => {
-  if (!client) return;
-
-  return client.subscribe(
-    `/topic/channels/${channelId}`,
-    (msg) => callback(JSON.parse(msg.body))
-  );
-};
-
-export const sendSocketMessage = (channelId, content) => {
-  if (!client) return;
-
-  client.publish({
-    destination: `/app/channels/${channelId}/messages`,
-    body: JSON.stringify({ content }),
-  });
-};
+export const getClient = () => client;
