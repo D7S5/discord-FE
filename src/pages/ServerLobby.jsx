@@ -5,7 +5,7 @@ import api from "../api"; // ✅ 추가
 import ChannelItem from "../components/ChannelItem";
 import ChannelPage from "./ChannelPage";
 import MemberList from "../components/MemberList";
-
+import ServerSidebar from "../components/ServerSidebar";
 import { connectWebSocket, getClient } from "../websocket";
 import CreateChannelModal from "../components/CreateChannelModal";
 import "../styles/ServerLobby.css";
@@ -55,6 +55,7 @@ const ServerLobby = () => {
 
   return (
     <div className="server-lobby">
+      <ServerSidebar />
       <aside className="channel-sidebar">
         <div className="server-header">
           <h2>{server.name}</h2>

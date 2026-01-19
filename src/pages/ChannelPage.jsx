@@ -45,7 +45,7 @@ export default function ChannelPage({ channel }) {
       subscriptionRef.current?.unsubscribe();
       subscriptionRef.current = null;
     }
-  }, [channel.id]);
+  }, [channel]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
