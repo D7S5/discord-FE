@@ -1,0 +1,72 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  width: 420px;
+  background: #313338;
+  border-radius: 8px;
+  padding: 20px;
+  color: #fff;
+}
+
+.modal h2 {
+  margin-bottom: 16px;
+}
+
+.channel-type {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.channel-type button {
+  flex: 1;
+  padding: 10px;
+  background: #2b2d31;
+  border: none;
+  color: #dbdee1;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.channel-type button.active {
+  background: #5865f2;
+  color: white;
+}
+
+.modal input {
+  width: 100%;
+  padding: 10px;
+  background: #1e1f22;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions .cancel {
+  background: transparent;
+  color: #dbdee1;
+  border: none;
+}
+
+.modal-actions .create {
+  background: #5865f2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+}

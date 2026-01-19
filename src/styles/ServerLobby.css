@@ -58,3 +58,25 @@
   color: #949ba4;
   font-size: 18px;
 }
+.add-channel-btn {
+  background: transparent;
+  border: none;
+  color: #949ba4;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.add-channel-btn:hover {
+  background: #3f4147;
+  color: #dbdee1;
+}
+
+.add-channel-btn:active {
+  background: #404249;
+}
+
