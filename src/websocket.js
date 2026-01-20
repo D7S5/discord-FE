@@ -6,7 +6,12 @@ let client = null;
 let connectCallbacks = [];
 let activating = false;
 
-export const connectWebSocket = (onConnect) => {
+export const connectWebSocket = (serverId, onConnect) => {
+  if (!serverId) {
+    console.error("serverId is required to connect WebSocket");
+    return;
+  }
+
   if (onConnect) {
     connectCallbacks.push(onConnect);
   }
@@ -28,6 +33,7 @@ export const connectWebSocket = (onConnect) => {
     
     connectHeaders: {
     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    serverId: String(serverId)
   },
     reconnectDelay: 5000,
 

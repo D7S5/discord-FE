@@ -24,10 +24,11 @@ const ServerLobby = () => {
 
   /* ✅ WebSocket 최초 1회 연결 */
   useEffect(() => {
-    connectWebSocket(() => {
-      console.log("WS connected =", getClient()?.connected);
-    });
-  }, []);
+  connectWebSocket(serverId, () => {
+    if (!serverId ) return ;
+    console.log("WS connected, serverId =", serverId);
+  });
+}, [serverId]);
 
   /* ✅ 서버 로비 데이터 로딩 */
   useEffect(() => {
