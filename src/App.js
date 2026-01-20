@@ -42,16 +42,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* 서버 + 채널 (디스코드 핵심) */}
-        {/* <Route
-          path="/channels/:serverId/*"
-          element={
-            <PrivateRoute>
-              <ServerLayoutPage />
-            </PrivateRoute>
-          }
-        /> */}
-
         {/* 기본 진입 */}
         <Route
           path="/"

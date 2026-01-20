@@ -7,8 +7,6 @@ let connectCallbacks = [];
 let activating = false;
 
 export const connectWebSocket = (onConnect) => {
-  console.log("connectWebSocket CALLED");
-
   if (onConnect) {
     connectCallbacks.push(onConnect);
   }
