@@ -27,7 +27,7 @@ export default function ChannelPage({ channel }) {
   useEffect(() => {
     if (!channel) return;
 
-    connectWebSocket(() => {
+    // connectWebSocket(() => {
       const client = getClient();
       if (!client) return;
 
@@ -40,7 +40,7 @@ export default function ChannelPage({ channel }) {
           setMessages(prev => [...prev, body]);
         }
       );
-    });
+    // });
     return () => {
       subscriptionRef.current?.unsubscribe();
       subscriptionRef.current = null;
