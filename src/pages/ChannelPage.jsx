@@ -26,8 +26,7 @@ export default function ChannelPage({ channel }) {
 
   useEffect(() => {
     if (!channel) return;
-
-    // connectWebSocket(() => {
+  
       const client = getClient();
       if (!client) return;
 
@@ -40,7 +39,6 @@ export default function ChannelPage({ channel }) {
           setMessages(prev => [...prev, body]);
         }
       );
-    // });
     return () => {
       subscriptionRef.current?.unsubscribe();
       subscriptionRef.current = null;
@@ -102,8 +100,24 @@ export default function ChannelPage({ channel }) {
 function MessageItem({ message }) {
   return (
     <div className="message-item">
-      <span className="author">{message.senderName}</span>
-      <span className="content">{message.content}</span>
+      <div className="message-avatar">
+        {message.senderName?.[0] ?? "?"}
+      </div>
+
+      <div className="message-body">
+        <div className="message-meta">
+          <span className="message-author">
+            {message.senderName}
+          </span>
+          <span className="message-time">
+            {new Date(message.createdAt).toLocaleTimeString()}
+          </span>
+        </div>
+
+        <div className="message-content">
+          {message.content}
+        </div>
+      </div>
     </div>
   );
 }
