@@ -76,7 +76,11 @@ function MemberItem({ member, offline }) {
         <span className={`status ${member.online ? "online" : "offline"}`} />
       </div>
 
-      <span className="username">{member.username}</span>
+      {/* ⭐ role class 추가 */}
+      <span className={`username role-${member.role.toLowerCase()}`}>
+        {member.username}
+      </span>
     </div>
   );
 }
+

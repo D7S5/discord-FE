@@ -24,14 +24,31 @@ const ServerLobby = () => {
 
   /* ✅ WebSocket 최초 1회 연결 */
   useEffect(() => {
-  connectWebSocket(serverId, () => {
-    if (!serverId ) return ;
-    console.log("WS connected, serverId =", serverId);
-  });
+  connectWebSocket(serverId, async () => {
+    if (!serverId) return ;
+      const client = getClient();
+
+      client.subscribe(
+        `/topic/presence/${serverId}`,
+        msg => {
+          const { userId, status } = JSON.parse(msg.body);
+          setMembers(prev =>
+            prev.map(m =>
+              m.id === userId
+                ? { ...m, online: status === "ONLINE" }
+                : m
+            )
+          );
+        }
+      );
+      // await reloadMembers();
+    });
 }, [serverId]);
 
   /* ✅ 서버 로비 데이터 로딩 */
   useEffect(() => {
+    if (!serverId) return ;
+    
     getServerLobby(serverId).then((data) => {
       setServer(data.server);
       setChannels(data.channels);
@@ -46,8 +63,14 @@ const ServerLobby = () => {
     });
   }, [serverId, channelId, navigate]);
 
+  const reloadMembers = async () => {
+      const res = await api.get(`/channels/${serverId}/members`)
+      setMembers(res.data);
+  }
+
   /* ✅ 채널 목록 재로딩 (채널 생성 후 사용) */
   const reloadChannels = async () => {
+    if (!serverId) return ;
     const res = await api.get(`/channels/${serverId}/lobby`);
     setChannels(res.data.channels);
   };
