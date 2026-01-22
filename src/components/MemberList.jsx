@@ -37,7 +37,7 @@ function MemberSection({ title, members, offline }) {
   const grouped = ROLE_ORDER.reduce((acc, role) => {
     acc[role] = members.filter(m => m.role === role);
     return acc;
-  }, {});
+    }, {});
 
   return (
     <div className="member-group">
