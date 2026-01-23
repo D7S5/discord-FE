@@ -3,6 +3,7 @@ import DmList from "../components/DmList";
 import FriendsView from "../components/FriendsView";
 import DmChatView from "../components/DmChatView";
 import AddFriendModal from "../components/AddFriendModal";
+import ServerSidebar from "../components/ServerSidebar";
 import "../styles/MePage.css";
 
 export default function MePage() {
@@ -12,6 +13,7 @@ export default function MePage() {
 
   return (
     <div className="me-layout">
+        <ServerSidebar />
       {/* LEFT */}
       <aside className="sidebar">
         <div className="friends-header">
