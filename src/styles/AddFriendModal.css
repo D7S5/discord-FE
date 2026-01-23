@@ -1,0 +1,43 @@
+/* AddFriendModal.css */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: #313338;
+  padding: 20px;
+  width: 400px;
+  border-radius: 8px;
+  color: white;
+}
+
+.modal input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #1e1f22;
+  border: none;
+  color: white;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 8px 14px;
+}
+
+.add-friend {
+  background: #23a559;
+  color: white;
+  border-radius: 4px;
+}

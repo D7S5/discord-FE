@@ -1,0 +1,25 @@
+.me-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  background: #2b2d31;
+  color: white;
+}
+
+.content {
+  flex: 1;
+  background: #313338;
+  color: white;
+}
+
+.dm-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dm-item:hover {
+  background: #3a3c43;
+}

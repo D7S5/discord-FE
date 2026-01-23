@@ -2,8 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ServerListPage from "./pages/ServerListPage";
-import ServerLayoutPage from "./pages/ServerLayoutPage";
 import ServerLobby from "./pages/ServerLobby";
+import MePage from "./pages/MePage";
+
 const isAuthenticated = () => !!localStorage.getItem("accessToken");
 
 const PrivateRoute = ({ children }) =>
@@ -26,6 +27,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/channels/@me" element={<MePage />} />
         <Route
           path="/channels/:serverId"
           element={
