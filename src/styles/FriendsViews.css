@@ -1,0 +1,32 @@
+.friends-view {
+  padding: 16px;
+  color: #dcddde;
+}
+
+.friend-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #2f3136;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.friend-row button {
+  background: #3ba55d;
+  border: none;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.friend-row button:hover {
+  background: #2d7d46;
+}
+
+.empty {
+  opacity: 0.6;
+  padding: 8px;
+}

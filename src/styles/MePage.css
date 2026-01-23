@@ -1,25 +1,27 @@
-.me-layout {
+/* MePage.css */
+
+.me-root {
   display: flex;
   height: 100vh;
 }
 
+/* @me 전체 */
+.me-layout {
+  display: flex;
+  flex: 1;
+  background: #36393f;
+}
+
+/* 왼쪽 친구/DM 사이드바 */
 .sidebar {
   width: 240px;
-  background: #2b2d31;
-  color: white;
+  background: #2f3136;
+  display: flex;
+  flex-direction: column;
 }
 
+/* 메인 콘텐츠 */
 .content {
   flex: 1;
-  background: #313338;
-  color: white;
-}
-
-.dm-item {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.dm-item:hover {
-  background: #3a3c43;
+  overflow: hidden;
 }
