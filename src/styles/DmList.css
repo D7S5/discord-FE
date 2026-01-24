@@ -1,0 +1,20 @@
+.dm-list {
+  padding: 8px;
+}
+
+.dm-item {
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.dm-item:hover {
+  background: var(--hover);
+  color: var(--text-normal);
+}
+
+.dm-item.active {
+  background: var(--hover);
+  color: white;
+}

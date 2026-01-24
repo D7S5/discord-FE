@@ -1,32 +1,29 @@
 .friends-view {
   padding: 16px;
-  color: #dcddde;
+}
+
+.friends-view h3 {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 12px 0 8px;
 }
 
 .friend-row {
+  padding: 10px;
+  border-radius: 4px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background: #2f3136;
-  border-radius: 6px;
-  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+.friend-row:hover {
+  background: var(--hover);
 }
 
 .friend-row button {
-  background: #3ba55d;
+  background: var(--brand);
   border: none;
   color: white;
   padding: 4px 10px;
   border-radius: 4px;
-  cursor: pointer;
-}
-
-.friend-row button:hover {
-  background: #2d7d46;
-}
-
-.empty {
-  opacity: 0.6;
-  padding: 8px;
 }

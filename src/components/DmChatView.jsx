@@ -1,29 +1,35 @@
-// components/DmChatView.jsx
 import { useEffect, useState } from "react";
-import { getClient } from "../websocket";
+import api from "../api";
+import "../styles/DmChatView.css";
 
 export default function DmChatView({ roomId }) {
   const [messages, setMessages] = useState([]);
+  const [text, setText] = useState("");
 
   useEffect(() => {
-    const client = getClient();
-
-    if (!client) return;    
-        client.subscribe(
-        `/topic/dm.${roomId}`,
-        msg => setMessages(m => [...m, JSON.parse(msg.body)])
-        );
-
-    return () => client.unsubscribe();
+    api.get(`/messages/dm/${roomId}`).then((res) => {
+      setMessages(res.data);
+    });
   }, [roomId]);
+
+  const send = async () => {
+    await api.post(`/messages/dm/${roomId}`, { content: text });
+    setText("");
+  };
 
   return (
     <div className="dm-chat">
-      {messages.map(m => (
-        <div key={m.id} className="msg">
-          <b>{m.senderName}</b>: {m.content}
-        </div>
-      ))}
+      <div className="messages">
+        {messages.map((m) => (
+          <div key={m.id}>{m.content}</div>
+        ))}
+      </div>
+
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && send()}
+      />
     </div>
   );
 }

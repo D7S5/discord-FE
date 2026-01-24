@@ -1,6 +1,7 @@
 // components/DmList.jsx
 import { useEffect, useState } from "react";
 import api from "../api";
+import "../styles/DmList.css";
 
 export default function DmList({ onSelect }) {
   const [rooms, setRooms] = useState([]);

@@ -4,6 +4,8 @@ import RegisterPage from "./pages/RegisterPage";
 import ServerListPage from "./pages/ServerListPage";
 import ServerLobby from "./pages/ServerLobby";
 import MePage from "./pages/MePage";
+import DmChatView from "./components/DmChatView";
+import "./styles/Variables.css";
 
 const isAuthenticated = () => !!localStorage.getItem("accessToken");
 
@@ -27,7 +29,10 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/channels/@me" element={<MePage />} />
+        <Route path="/channels/@me" element={<MePage />}>
+        <Route path=":roomId" element={<DmChatView />} />
+        </Route>
+
         <Route
           path="/channels/:serverId"
           element={
