@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../api";
 import "../styles/FriendsViews.css";
 
-export default function FriendsViews() {
+export default function FriendsViews({ onOpenDm }) {
   const [requests, setRequests] = useState([]);
   const [friends, setFriends] = useState([]);
 
@@ -12,6 +12,11 @@ export default function FriendsViews() {
 
     const friendRes = await api.get("/friends"); // ACCEPTED 목록
     setFriends(friendRes.data);
+  };
+
+  const openDm = async (friendId) => {
+    const res = await api.post(`/dm/open/${friendId}`);
+    onOpenDm(res.data); // roomId
   };
 
   useEffect(() => {
@@ -43,10 +48,13 @@ export default function FriendsViews() {
 
       {/* ===== 친구 목록 ===== */}
       <h3>Friends</h3>
-
       {friends.map((f) => (
-        <div key={f.userId} className="friend-row">
-          <span>{f.username}</span>
+        <div
+          key={f.userId}
+          className="friend-row clickable"
+          onClick={() => openDm(f.userId)}
+        >
+          {f.username}
         </div>
       ))}
     </div>

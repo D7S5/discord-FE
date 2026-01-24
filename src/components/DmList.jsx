@@ -17,9 +17,8 @@ export default function DmList({ onSelect }) {
         <div
           key={room.roomId}
           className="dm-item"
-          onClick={() => onSelect(room.roomId)}
-        >
-          <span>{room.otherUser.username}</span>
+          onClick={() => onSelect(room.roomId)}       >
+          <span>{room.username}</span>
           {room.unreadCount > 0 && (
             <span className="badge">{room.unreadCount}</span>
           )}
