@@ -1,54 +1,72 @@
-/* 전체 DM 채팅 영역 */
+/* 전체 컨테이너 */
 .dm-chat {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #313338; /* Discord DM 배경 */
+  background-color: #313338; /* Discord 배경 */
   color: #dcddde;
-  font-size: 15px;
+  font-family: "Segoe UI", "Apple SD Gothic Neo", sans-serif;
 }
 
-/* 메시지 목록 */
+/* 메시지 영역 */
 .messages {
   flex: 1;
   overflow-y: auto;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* 메시지 하나 */
-.messages > div {
-  margin-bottom: 12px;
+/* 스크롤바 */
+.messages::-webkit-scrollbar {
+  width: 6px;
+}
+.messages::-webkit-scrollbar-thumb {
+  background-color: #1e1f22;
+  border-radius: 4px;
+}
+
+/* 메시지 공통 */
+.message {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 16px;
   line-height: 1.4;
+  font-size: 14px;
   word-break: break-word;
 }
 
-/* 메시지 호버 */
-.messages > div:hover {
-  background-color: rgba(255, 255, 255, 0.03);
-  border-radius: 6px;
-  padding: 4px 6px;
-  margin-left: -6px;
-  margin-right: -6px;
+/* 상대 메시지 */
+.message {
+  align-self: flex-start;
+  background-color: #2b2d31;
 }
 
-/* 입력창 컨테이너 느낌 */
+/* 내 메시지 (JSX에서 className 추가 추천) */
+.message.me {
+  align-self: flex-end;
+  background-color: #5865f2; /* Discord blurple */
+  color: #fff;
+}
+
+/* 입력창 영역 */
 .dm-chat input {
-  background-color: #383a40;
   border: none;
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin: 12px;
-  color: #dcddde;
-  font-size: 14px;
   outline: none;
+  padding: 14px 16px;
+  font-size: 14px;
+  background-color: #383a40;
+  color: #fff;
+  border-radius: 8px;
+  margin: 12px;
 }
 
-/* placeholder */
 .dm-chat input::placeholder {
-  color: #949ba4;
+  color: #b5bac1;
 }
 
-/* 포커스 */
+/* 포커스 효과 */
 .dm-chat input:focus {
   background-color: #404249;
 }

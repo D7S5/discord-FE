@@ -6,7 +6,7 @@ import "../styles/ServerSidebar.css";
 
 export default function ServerSidebar() {
   const [servers, setServers] = useState([]);
-  const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { serverId } = useParams(); // @me or serverId
 

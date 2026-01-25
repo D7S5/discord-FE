@@ -22,13 +22,12 @@ const ServerLobby = () => {
   const selectedChannelId = channelId ? Number(channelId) : null;
   const selectedChannel = channels.find(c => c.id === selectedChannelId);
 
-  /* ✅ WebSocket 최초 1회 연결 */
   useEffect(() => {
-  connectWebSocket(serverId, async () => {
-    if (!serverId) return ;
-      const client = getClient();
+    if (!serverId) return 
 
-      client.subscribe(
+  connectWebSocket((client) => {
+
+      const subscription = client.subscribe(
         `/topic/presence/${serverId}`,
         msg => {
           const { userId, status } = JSON.parse(msg.body);
@@ -41,7 +40,7 @@ const ServerLobby = () => {
           );
         }
       );
-      // await reloadMembers();
+      return () => subscription.unsubscribe();
     });
 }, [serverId]);
 
