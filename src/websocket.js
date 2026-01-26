@@ -6,14 +6,11 @@ let client = null;
 let connecting = false;
 let connectCallbacks = [];
 
-/**
- * WebSocket 연결
- */
 export const connectWebSocket = (onConnect) => {
   const token = localStorage.getItem("accessToken");
 
   if (!token) {
-    console.error("❌ accessToken 없음. WebSocket 연결 중단");
+    console.error("accessToken 없음. WebSocket 연결 중단");
     return;
   }
 
