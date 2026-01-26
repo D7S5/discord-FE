@@ -1,0 +1,33 @@
+.voice-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.control-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.control-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.control-btn.active {
+  background: #f04747;
+  color: white;
+}
+
+.control-btn.leave {
+  background: #f04747;
+  color: white;
+}

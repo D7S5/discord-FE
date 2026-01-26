@@ -1,0 +1,36 @@
+.voice-user-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  background: rgba(255,255,255,0.05);
+  transition: background 0.2s;
+}
+
+.voice-user-item:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  background: #7289da;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.username {
+  flex: 1;
+}
+
+.mic-off {
+  color: #f04747;
+  font-size: 14px;
+  margin-left: 6px;
+}

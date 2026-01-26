@@ -5,7 +5,7 @@ import ServerListPage from "./pages/ServerListPage";
 import ServerLobby from "./pages/ServerLobby";
 import MePage from "./pages/MePage";
 import DmChatView from "./components/DmChatView";
-import VoiceChannel from "./webrtc/VoiceChannel";
+import VoiceChannel from "./pages/VoiceChannel";
 import "./styles/Variables.css";
 
 const isAuthenticated = () => !!localStorage.getItem("accessToken");

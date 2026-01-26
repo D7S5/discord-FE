@@ -1,0 +1,15 @@
+.voice-channel {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  background: #2f3136;
+  color: white;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.participants-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
