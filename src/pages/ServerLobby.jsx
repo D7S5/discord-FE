@@ -100,12 +100,15 @@ const ServerLobby = () => {
         <div className="channel-list">
           {channels.map(channel => (
             <ChannelItem
-              key={channel.id}
               channel={channel}
               selected={channel.id === selectedChannelId}
-              onClick={() =>
-                navigate(`/channels/${serverId}/${channel.id}`)
-              }
+              onClick={() => {
+                if (channel.type === "VOICE") {
+                  navigate(`/voice/${serverId}/${channel.id}`);
+                } else {
+                  navigate(`/channels/${serverId}/${channel.id}`);
+                }
+              }}
             />
           ))}
         </div>
