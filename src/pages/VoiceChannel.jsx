@@ -1,13 +1,22 @@
-import React, { useEffect } from "react";
-import { useMediasoup } from "../hooks/useMediasoup";
+import React from "react";
+import { useVoiceRoom } from "../components/useVoiceRoom";
+import VoiceControls from "../components/VoiceControls";
+import "../styles/Voice.css";
 
 export default function VoiceChannelPage({ roomId }) {
-  const { device } = useMediasoup(roomId);
+  const { joinRoom, leaveRoom, joined } = useVoiceRoom(roomId);
 
-  useEffect(() => {
-    if (!device) return;
-    // getUserMedia, transport 생성, produce/consume 로직 추가
-  }, [device]);
+  return (
+    <div className="voice-channel">
+      <h2>🔊 Voice Channel</h2>
 
-  return <div>🎙 Voice Channel: {roomId}</div>;
+      {!joined ? (
+        <button className="join-btn" onClick={joinRoom}>
+          Join Voice
+        </button>
+      ) : (
+        <VoiceControls onLeave={leaveRoom} />
+      )}
+    </div>
+  );
 }

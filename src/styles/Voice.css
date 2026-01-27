@@ -1,0 +1,28 @@
+.voice-channel {
+  background: #2b2d31;
+  color: white;
+  padding: 16px;
+  height: 100%;
+}
+
+.join-btn {
+  background: #5865f2;
+  border: none;
+  padding: 10px 16px;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.voice-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.leave-btn {
+  background: #ed4245;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+}

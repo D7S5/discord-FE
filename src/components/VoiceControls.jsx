@@ -1,15 +1,11 @@
-import React from "react";
-import "../styles/VoiceControls.css";
-
-export default function VoiceControls({ muted, onToggleMute, onLeave }) {
+export default function VoiceControls({ onLeave }) {
   return (
     <div className="voice-controls">
-      <button className={`control-btn ${muted ? "active" : ""}`} onClick={onToggleMute}>
-        {muted ? "🔇" : "🎤"}
+      <button className="leave-btn" onClick={onLeave}>
+        Leave
       </button>
-      <button className="control-btn leave" onClick={onLeave}>
-        🚪 Leave
-      </button>
+      <button disabled>🎤 Mic ON</button>
+      <button disabled>🎧 Headset</button>
     </div>
   );
 }
