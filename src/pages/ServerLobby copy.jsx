@@ -5,11 +5,9 @@ import api from "../api"; // ✅ 추가
 import ChannelItem from "../components/ChannelItem";
 import ChannelPage from "./ChannelPage";
 import MemberList from "../components/MemberList";
-import VoiceChannelItem from "../components/VoiceChannelItem";
 import ServerSidebar from "../components/ServerSidebar";
 import { connectWebSocket, getClient } from "../websocket";
 import CreateChannelModal from "../components/CreateChannelModal";
-import VoicePanel from "../components/voice/VoicePannel";
 import "../styles/ServerLobby.css";
 
 const ServerLobby = () => {
@@ -24,33 +22,10 @@ const ServerLobby = () => {
   const selectedChannelId = channelId ? Number(channelId) : null;
   const selectedChannel = channels.find(c => c.id === selectedChannelId);
 
-  const [voiceUsers, setVoiceUsers] = useState({});     
-
-  const [currentVoiceChannelId, setCurrentVoiceChannelId] = useState(null);
-
   useEffect(() => {
     if (!serverId) return 
 
   connectWebSocket((client) => {
-
-    client.subscribe(`/topic/voice/${serverId}`, msg => {
-      const event = JSON.parse(msg.body);
-
-      if (event.type === "JOIN") {
-        setVoiceUsers(prev => ({
-          ...prev,
-          [event.channelId]: [...(prev[event.channelId] || []), event.userId],
-        }));
-      }
-
-      if (event.type === "LEAVE") {
-        setVoiceUsers(prev => ({
-          ...prev,
-          [event.channelId]:
-            (prev[event.channelId] || []).filter(id => id !== event.userId),
-        }));
-      }
-    });
 
       const subscription = client.subscribe(
         `/topic/presence/${serverId}`,
@@ -92,32 +67,6 @@ const ServerLobby = () => {
       setMembers(res.data);
   }
 
-  const joinVoiceChannel = (channelId) => {
-  const client = getClient();
-  if (!client?.connected) return;
-
-  client.publish({
-    destination: "/app/voice.join",
-    body: JSON.stringify({
-      serverId,
-      channelId,
-    }),
-  });
-};
-
-const leaveVoiceChannel = (channelId) => {
-  const client = getClient();
-  if (!client?.connected) return;
-
-  client.publish({
-    destination: "/app/voice.leave",
-    body: JSON.stringify({
-      serverId,
-      channelId,
-    }),
-  });
-};
-
   /* ✅ 채널 목록 재로딩 (채널 생성 후 사용) */
   const reloadChannels = async () => {
     if (!serverId) return ;
@@ -150,35 +99,21 @@ const leaveVoiceChannel = (channelId) => {
 
         <div className="channel-list">
           {channels.map(channel => (
-            channel.type === "VOICE" ? (
-              <VoiceChannelItem
-                key={channel.id}
-                channel={channel}
-                users={voiceUsers[channel.id] || []}
-                selected={currentVoiceChannelId === channel.id}
-                onClick={() => {
-                  if (currentVoiceChannelId !== channel.id) {
-                    if (currentVoiceChannelId) {
-                      leaveVoiceChannel(currentVoiceChannelId);
-                    }
-                    joinVoiceChannel(channel.id);
-                    setCurrentVoiceChannelId(channel.id);
-                  }
-                }}
-              />
-            ) : (
-              <ChannelItem
-                key={channel.id}
-                channel={channel}
-                selected={selectedChannelId === channel.id}
-                onClick={() =>
-                  navigate(`/channels/${serverId}/${channel.id}`)
+            <ChannelItem
+              channel={channel}
+              selected={channel.id === selectedChannelId}
+              onClick={() => {
+                if (channel.type === "VOICE") {
+                  navigate(`/voice/${serverId}/${channel.id}`);
+                } else {
+                  navigate(`/channels/${serverId}/${channel.id}`);
                 }
-              />
-            )
-            ))}
+              }}
+            />
+          ))}
         </div>
       </aside>
+
       {/* 채팅 영역 */}
       <main className="channel-content">
         <ChannelPage channel={selectedChannel} />
@@ -186,9 +121,7 @@ const leaveVoiceChannel = (channelId) => {
 
       {/* 멤버 리스트 */}
       <MemberList members={members} />
-      <VoicePanel channel={selectedChannel} />
     </div>
-    
   );
 };
 

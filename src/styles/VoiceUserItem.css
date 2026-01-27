@@ -1,36 +1,22 @@
-.voice-user-item {
+.voice-user {
   display: flex;
   align-items: center;
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-bottom: 2px;
-  background: rgba(255,255,255,0.05);
-  transition: background 0.2s;
+  padding: 4px 8px 4px 28px;
+  font-size: 13px;
+  color: #dbdee1;
 }
 
-.voice-user-item:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  background: #7289da;
-  color: white;
+.status {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 8px;
-  font-weight: bold;
+  margin-right: 6px;
 }
 
-.username {
-  flex: 1;
+.status.online {
+  background: #23a559;
 }
 
-.mic-off {
-  color: #f04747;
-  font-size: 14px;
-  margin-left: 6px;
+.status.muted {
+  background: #f23f43;
 }

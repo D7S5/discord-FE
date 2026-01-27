@@ -1,9 +1,10 @@
+import "../styles/VoiceUserItem.css";
+
 export default function VoiceUserItem({ user }) {
   return (
     <div className="voice-user">
-      <span className="avatar" />
-      <span>{user.name}</span>
-      <span className={user.speaking ? "speaking" : ""}>🎤</span>
+      <span className={`status ${user.muted ? "muted" : "online"}`} />
+      <span className="name">{user.username}</span>
     </div>
   );
 }
