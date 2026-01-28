@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Device } from "mediasoup-client";
 import voiceApi from "../voiceApi";
-import { useSpeakingDetector } from "../hooks/useSpeakingDetector"; // ✅ 오타 수정
+import { useSpeakingDetector } from "../hooks/useSpeakingDetector"; 
 import { getClient } from "../websocket";
 
 export function useVoiceRoom(roomId) {
@@ -12,18 +12,28 @@ export function useVoiceRoom(roomId) {
   const transportRef = useRef(null);
   const deviceRef = useRef(null);
 
-  // ✅ Hook은 무조건 최상단
   const speaking = useSpeakingDetector(stream);
 
   /* 🎧 음성 채널 입장 */
   const joinRoom = async () => {
     if (joined) return;
 
-    // 🎤 마이크 권한
+    const client = getClient();
+    if (!client || !client.connected) return;
+
+    // ✅ 1. WebSocket JOIN 이벤트
+    client.publish({
+      destination: "/app/voice.join",
+      body: JSON.stringify({
+        channelId: roomId,
+      }),
+    });
+
+    // 🎤 2. 마이크 권한
     const media = await navigator.mediaDevices.getUserMedia({ audio: true });
     setStream(media);
 
-    // RTP Capabilities
+    // 3. RTP Capabilities
     const { data: rtpCapabilities } = await voiceApi.get(
       `/rooms/${roomId}/rtp-capabilities`
     );
@@ -32,7 +42,7 @@ export function useVoiceRoom(roomId) {
     await device.load({ routerRtpCapabilities: rtpCapabilities });
     deviceRef.current = device;
 
-    // Transport 생성
+    // 4. Transport 생성
     const { data: transportInfo } = await voiceApi.post(
       `/rooms/${roomId}/transports`
     );
@@ -48,10 +58,10 @@ export function useVoiceRoom(roomId) {
     });
 
     transport.on("produce", async ({ kind, rtpParameters }, callback) => {
-      const { data } = await voiceApi.post(`/transports/${transport.id}/produce`, {
-        kind,
-        rtpParameters,
-      });
+      const { data } = await voiceApi.post(
+        `/transports/${transport.id}/produce`,
+        { kind, rtpParameters }
+      );
       callback({ id: data.id });
     });
 
@@ -61,19 +71,31 @@ export function useVoiceRoom(roomId) {
     setJoined(true);
   };
 
-  /* ❌ 음성 채널 나가기 */
+  /* 🚪 음성 채널 퇴장 */
   const leaveRoom = () => {
+    const client = getClient();
+
+    if (client?.connected) {
+      client.publish({
+        destination: "/app/voice.leave",
+        body: JSON.stringify({
+          channelId: roomId,
+        }),
+      });
+    }
+
     stream?.getTracks().forEach(t => t.stop());
     transportRef.current?.close();
+
     setStream(null);
     setJoined(false);
   };
 
-  /* 🟢 SPEAKING 이벤트 전송 */
+  /* 🟢 SPEAKING 이벤트 */
   useEffect(() => {
     if (!joined) return;
     const client = getClient();
-    if (!client || !client.connected) return;
+    if (!client?.connected) return;
 
     client.publish({
       destination: `/app/voice/${roomId}/speaking`,
@@ -99,6 +121,6 @@ export function useVoiceRoom(roomId) {
     leaveRoom,
     joined,
     users,
-    speaking, // ✅ UI에서 초록불 표시 가능
+    speaking,
   };
 }
