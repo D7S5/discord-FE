@@ -1,0 +1,67 @@
+.voice-panel {
+  position: fixed;
+  bottom: 0;
+  left: 72px;              /* 서버 사이드바 */
+  width: 240px;            /* 채널 리스트 폭 */
+  background: #232428;
+  border-top: 1px solid #2b2d31;
+  padding: 8px;
+  z-index: 200;
+  box-sizing: border-box;
+}
+
+/* 상단 헤더 */
+.voice-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.voice-channel-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f2f3f5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.voice-leave-btn {
+  background: none;
+  border: none;
+  color: #b5bac1;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.voice-leave-btn:hover {
+  color: #f23f42;
+}
+
+/* 유저 리스트 */
+.voice-users {
+  margin: 6px 0;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* 하단 컨트롤 */
+.voice-panel-controls {
+  margin-top: 6px;
+}
+
+.voice-join-btn {
+  width: 100%;
+  background: #3ba55d;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 0;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.voice-join-btn:hover {
+  background: #2d7d46;
+}
