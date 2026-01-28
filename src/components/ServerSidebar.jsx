@@ -25,7 +25,7 @@ export default function ServerSidebar() {
             serverId === "@me" ? "active" : ""
           }`}
           onClick={() => navigate("/channels/@me")}
-          title="다이렉트 메시지"
+          title="다이렉트 메시지" 
         >
           🟣
         </div>

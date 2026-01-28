@@ -1,4 +1,4 @@
-import VoiceUserItem from "./VoiceUserItem";
+import VoiceUserItem from "./voice/VoiceUserItem";
 
 const ChannelItem = ({
   channel,

@@ -80,3 +80,21 @@
   background: #404249;
 }
 
+.voice-panel {
+  position: fixed;
+  bottom: 0;
+  left: 240px; /* 서버 + 채널 사이드바 */
+  right: 240px; /* 멤버 리스트 */
+  height: 120px;
+  background: #1e1f22;
+  border-top: 1px solid #2b2d31;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+}
+
+.voice-header {
+  font-size: 13px;
+  color: #b5bac1;
+  margin-bottom: 6px;
+}

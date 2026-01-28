@@ -1,16 +1,10 @@
-import VoiceUserItem from "../VoiceUserItem";
+import React from "react";
+import VoiceUserItem from "./VoiceUserItem";
+import "../../styles/VoiceUserList.css";
 
-export default function VoiceUserList({ users = [] }) {
-  if (!users.length) {
-    return (
-      <div className="voice-users empty">
-        접속 중인 유저 없음
-      </div>
-    );
-  }
-
+export default function VoiceUserList({ users }) {
   return (
-    <div className="voice-users">
+    <div className="voice-user-list">
       {users.map(user => (
         <VoiceUserItem key={user.userId} user={user} />
       ))}

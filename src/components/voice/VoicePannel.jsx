@@ -1,17 +1,14 @@
-import VoiceControls from "../VoiceControls";
-import VoiceUserList from "./VoiceUserList";
 import { useVoiceRoom } from "../useVoiceRoom";
+import VoiceUserList from "./VoiceUserList";
+import VoiceControls from "./VoiceControls";
 
-export default function VoicePanel({ channel }) {
+export default function VoiceChannel({ channel }) {
   const {
-    joined,
     joinRoom,
     leaveRoom,
-    users,
-    muted,
-  } = useVoiceRoom(channel?.id);
-
-  if (!channel || channel.type !== "VOICE") return null;
+    joined,
+    users
+  } = useVoiceRoom(channel.id);
 
   return (
     <div className="voice-panel">
@@ -26,7 +23,7 @@ export default function VoicePanel({ channel }) {
           음성 참여
         </button>
       ) : (
-        <VoiceControls onLeave={leaveRoom} muted={muted} />
+        <VoiceControls onLeave={leaveRoom} />
       )}
     </div>
   );

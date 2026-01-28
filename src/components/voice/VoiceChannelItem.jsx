@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/VoiceChannelItem.css";
+import "../../styles/VoiceChannelItem.css";
 
 const VoiceChannelItem = ({ channel, users = [], selected, onClick }) => {
   return (

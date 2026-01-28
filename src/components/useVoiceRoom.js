@@ -1,136 +1,104 @@
 import { useEffect, useRef, useState } from "react";
-import * as mediasoupClient from "mediasoup-client";
-import axios from "axios";
-
-const MS_URL = "http://localhost:3001";
+import { Device } from "mediasoup-client";
+import voiceApi from "../voiceApi";
+import { useSpeakingDetector } from "../hooks/useSpeakingDetector"; // ✅ 오타 수정
+import { getClient } from "../websocket";
 
 export function useVoiceRoom(roomId) {
-  const deviceRef = useRef(null);
-  const sendTransportRef = useRef(null);
-  const recvTransportRef = useRef(null);
-
-  const producers = useRef(new Map());
-  const consumers = useRef(new Map());
-
   const [joined, setJoined] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [stream, setStream] = useState(null);
 
-  /* 1️⃣ Device 로드 */
-  const loadDevice = async () => {
-    const { data: rtpCapabilities } = await axios.get(
-      `${MS_URL}/rooms/${roomId}/rtp-capabilities`
-    );
+  const transportRef = useRef(null);
+  const deviceRef = useRef(null);
 
-    const device = new mediasoupClient.Device();
-    await device.load({ routerRtpCapabilities: rtpCapabilities });
+  // ✅ Hook은 무조건 최상단
+  const speaking = useSpeakingDetector(stream);
 
-    deviceRef.current = device;
-  };
-
-  /* 2️⃣ Transport 생성 */
-  const createTransport = async () => {
-    const { data } = await axios.post(
-      `${MS_URL}/rooms/${roomId}/transports`
-    );
-
-    const device = deviceRef.current;
-
-    sendTransportRef.current = device.createSendTransport(data);
-    recvTransportRef.current = device.createRecvTransport(data);
-
-    // SEND connect
-    sendTransportRef.current.on("connect", async ({ dtlsParameters }, cb) => {
-      await axios.post(`${MS_URL}/transports/${sendTransportRef.current.id}/connect`, {
-        dtlsParameters,
-      });
-      cb();
-    });
-
-    // PRODUCE
-    sendTransportRef.current.on(
-      "produce",
-      async ({ kind, rtpParameters }, cb) => {
-        const { data } = await axios.post(
-          `${MS_URL}/transports/${sendTransportRef.current.id}/produce`,
-          { kind, rtpParameters }
-        );
-        cb({ id: data.id });
-      }
-    );
-
-    // RECV connect
-    recvTransportRef.current.on("connect", async ({ dtlsParameters }, cb) => {
-      await axios.post(`${MS_URL}/transports/${recvTransportRef.current.id}/connect`, {
-        dtlsParameters,
-      });
-      cb();
-    });
-  };
-
-  /* 3️⃣ 마이크 송출 */
-  const startMic = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const track = stream.getAudioTracks()[0];
-
-    const producer = await sendTransportRef.current.produce({
-      track,
-      codecOptions: {
-        opusStereo: true,
-        opusDtx: true,
-      },
-    });
-
-    producers.current.set(producer.id, producer);
-  };
-
-  /* 4️⃣ 다른 사람 음성 수신 */
-  const consume = async (producerId) => {
-    const { data } = await axios.post(`${MS_URL}/consume`, {
-      roomId,
-      transportId: recvTransportRef.current.id,
-      producerId,
-      rtpCapabilities: deviceRef.current.rtpCapabilities,
-    });
-
-    const consumer = await recvTransportRef.current.consume({
-      id: data.id,
-      producerId,
-      kind: data.kind,
-      rtpParameters: data.rtpParameters,
-    });
-
-    const audio = new Audio();
-    audio.srcObject = new MediaStream([consumer.track]);
-    audio.autoplay = true;
-
-    consumers.current.set(consumer.id, consumer);
-  };
-
-  /* 5️⃣ 방 입장 */
+  /* 🎧 음성 채널 입장 */
   const joinRoom = async () => {
-    await loadDevice();
-    await createTransport();
-    await startMic();
+    if (joined) return;
+
+    // 🎤 마이크 권한
+    const media = await navigator.mediaDevices.getUserMedia({ audio: true });
+    setStream(media);
+
+    // RTP Capabilities
+    const { data: rtpCapabilities } = await voiceApi.get(
+      `/rooms/${roomId}/rtp-capabilities`
+    );
+
+    const device = new Device();
+    await device.load({ routerRtpCapabilities: rtpCapabilities });
+    deviceRef.current = device;
+
+    // Transport 생성
+    const { data: transportInfo } = await voiceApi.post(
+      `/rooms/${roomId}/transports`
+    );
+
+    const transport = device.createSendTransport(transportInfo);
+    transportRef.current = transport;
+
+    transport.on("connect", async ({ dtlsParameters }, callback) => {
+      await voiceApi.post(`/transports/${transport.id}/connect`, {
+        dtlsParameters,
+      });
+      callback();
+    });
+
+    transport.on("produce", async ({ kind, rtpParameters }, callback) => {
+      const { data } = await voiceApi.post(`/transports/${transport.id}/produce`, {
+        kind,
+        rtpParameters,
+      });
+      callback({ id: data.id });
+    });
+
+    const track = media.getAudioTracks()[0];
+    await transport.produce({ track });
+
     setJoined(true);
   };
 
-  /* 6️⃣ 방 나가기 */
+  /* ❌ 음성 채널 나가기 */
   const leaveRoom = () => {
-    producers.current.forEach(p => p.close());
-    consumers.current.forEach(c => c.close());
-
-    sendTransportRef.current?.close();
-    recvTransportRef.current?.close();
-
-    producers.current.clear();
-    consumers.current.clear();
-
+    stream?.getTracks().forEach(t => t.stop());
+    transportRef.current?.close();
+    setStream(null);
     setJoined(false);
   };
+
+  /* 🟢 SPEAKING 이벤트 전송 */
+  useEffect(() => {
+    if (!joined) return;
+    const client = getClient();
+    if (!client || !client.connected) return;
+
+    client.publish({
+      destination: `/app/voice/${roomId}/speaking`,
+      body: JSON.stringify({ speaking }),
+    });
+  }, [speaking, joined, roomId]);
+
+  /* 👥 음성 채널 유저 목록 */
+  useEffect(() => {
+    const client = getClient();
+    if (!client) return;
+
+    const sub = client.subscribe(
+      `/topic/voice/${roomId}`,
+      msg => setUsers(JSON.parse(msg.body))
+    );
+
+    return () => sub.unsubscribe();
+  }, [roomId]);
 
   return {
     joinRoom,
     leaveRoom,
-    consume,
     joined,
+    users,
+    speaking, // ✅ UI에서 초록불 표시 가능
   };
 }

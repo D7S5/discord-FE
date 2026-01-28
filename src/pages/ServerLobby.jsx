@@ -5,7 +5,7 @@ import api from "../api"; // ✅ 추가
 import ChannelItem from "../components/ChannelItem";
 import ChannelPage from "./ChannelPage";
 import MemberList from "../components/MemberList";
-import VoiceChannelItem from "../components/VoiceChannelItem";
+import VoiceChannelItem from "../components/voice/VoiceChannelItem";
 import ServerSidebar from "../components/ServerSidebar";
 import { connectWebSocket, getClient } from "../websocket";
 import CreateChannelModal from "../components/CreateChannelModal";
@@ -118,6 +118,10 @@ const leaveVoiceChannel = (channelId) => {
   });
 };
 
+const currentVoiceChannel = channels.find(
+  c => c.id === currentVoiceChannelId
+);
+
   /* ✅ 채널 목록 재로딩 (채널 생성 후 사용) */
   const reloadChannels = async () => {
     if (!serverId) return ;
@@ -186,7 +190,16 @@ const leaveVoiceChannel = (channelId) => {
 
       {/* 멤버 리스트 */}
       <MemberList members={members} />
-      <VoicePanel channel={selectedChannel} />
+      {currentVoiceChannel && (
+        <VoicePanel
+          channel={currentVoiceChannel}
+          users={voiceUsers[currentVoiceChannelId] || []}
+          onLeave={() => {
+            leaveVoiceChannel(currentVoiceChannelId);
+            setCurrentVoiceChannelId(null);
+          }}
+        />
+      )}
     </div>
     
   );

@@ -1,13 +1,13 @@
 // components/VoiceCall.jsx
 import { useEffect, useRef } from "react";
-import { connectWebSocket, getClient } from "../websocket";
+import { connectWebSocket, getClient } from "../../websocket";
 import {
   createOffer,
   handleOffer,
   handleAnswer,
   handleIce,
   closeCall,
-} from "../webrtc/webrtc";
+} from "../../webrtc/webrtc";
 
 export default function VoiceCall({ myId, targetId }) {
   const audioRef = useRef();
