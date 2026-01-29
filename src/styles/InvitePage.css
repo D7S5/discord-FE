@@ -1,0 +1,52 @@
+.invite-page {
+  height: 100vh;
+  background: #313338;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #dbdee1;
+}
+
+.invite-card {
+  background: #1e1f22;
+  padding: 32px;
+  border-radius: 8px;
+  width: 360px;
+  text-align: center;
+}
+
+.invite-label {
+  font-size: 12px;
+  color: #b5bac1;
+  margin-bottom: 8px;
+}
+
+.invite-members {
+  font-size: 13px;
+  color: #b5bac1;
+  margin: 12px 0 20px;
+}
+
+.invite-join-btn {
+  width: 100%;
+  padding: 10px;
+  background: #5865f2;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.invite-join-btn:hover {
+  background: #4752c4;
+}
+
+.invite-error {
+  height: 100vh;
+  background: #313338;
+  color: #f23f43;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

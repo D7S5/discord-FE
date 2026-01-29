@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import api from "../api";
 
 import "../styles/AuthLayout.css";
@@ -13,6 +13,11 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const redirect = params.get("redirect") || "/channels";
+  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -24,7 +29,7 @@ export default function Login() {
       });
       
       localStorage.setItem("accessToken", res.data.accessToken);
-      navigate("/channels");
+      navigate(redirect);
     } catch (err) {
       setError("이메일 또는 비밀번호가 올바르지 않습니다.");
     }

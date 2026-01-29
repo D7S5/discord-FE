@@ -5,6 +5,7 @@ import ServerListPage from "./pages/ServerListPage";
 import ServerLobby from "./pages/ServerLobby";
 import MePage from "./pages/MePage";
 import DmChatView from "./components/DmChatView";
+import InvitePage from "./pages/InvitePage";
 import "./styles/Variables.css";
 
 const isAuthenticated = () => !!localStorage.getItem("accessToken");
@@ -29,8 +30,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* <Route path="/voice/:serverId/:channelId" element={<VoiceChannelPage />} /> */}
-        {/* <Route path="/channels/:serverId/voice/:channelId" element={<VoiceChannel />}/> */}
+        <Route path="/invite/:code" element={<InvitePage />} />
 
         <Route path="/channels/@me" element={<MePage />}>
         <Route path=":roomId" element={<DmChatView />} />
