@@ -98,3 +98,23 @@
   color: #b5bac1;
   margin-bottom: 6px;
 }
+
+.invite-btn {
+  width: 100%;
+  margin: 8px 0;
+  padding: 6px 10px;
+
+  background: transparent;
+  border: none;
+  color: #b5bac1;
+
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.invite-btn:hover {
+  background: #3f4147;
+  color: #ffffff;
+}

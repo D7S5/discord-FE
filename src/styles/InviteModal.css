@@ -1,0 +1,83 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.invite-modal {
+  width: 420px;
+  background: #313338;
+  border-radius: 8px;
+  padding: 20px;
+  color: #dbdee1;
+}
+
+.invite-modal h2 {
+  margin-bottom: 16px;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e1f22;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.option select {
+  background: #2b2d31;
+  color: #dbdee1;
+  border: none;
+  padding: 4px 6px;
+}
+
+.primary {
+  width: 100%;
+  margin-top: 12px;
+  background: #5865f2;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary:hover {
+  background: #4752c4;
+}
+
+.invite-result {
+  display: flex;
+  gap: 8px;
+}
+
+.invite-result input {
+  flex: 1;
+  background: #1e1f22;
+  border: none;
+  padding: 8px;
+  color: #dbdee1;
+}
+
+.invite-result button {
+  background: #5865f2;
+  border: none;
+  padding: 0 12px;
+  color: white;
+  border-radius: 4px;
+}
+
+.close {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  color: #b5bac1;
+  cursor: pointer;
+}

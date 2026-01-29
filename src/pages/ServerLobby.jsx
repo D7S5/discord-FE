@@ -11,6 +11,7 @@ import { connectWebSocket, getClient } from "../websocket";
 import CreateChannelModal from "../components/CreateChannelModal";
 import VoicePanel from "../components/voice/VoicePannel";
 import "../styles/ServerLobby.css";
+import InviteModal from "./InviteModal";
 
 const ServerLobby = () => {
   const { serverId, channelId } = useParams();
@@ -20,6 +21,7 @@ const ServerLobby = () => {
   const [channels, setChannels] = useState([]);
   const [members, setMembers] = useState([]);
   const [openCreateChannel, setOpenCreateChannel] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
 
   const selectedChannelId = channelId ? Number(channelId) : null;
   const selectedChannel = channels.find(c => c.id === selectedChannelId);
@@ -136,6 +138,16 @@ const currentVoiceChannel = channels.find(
       <ServerSidebar />
       <aside className="channel-sidebar">
         <div className="server-header">
+          <button className="invite-btn" onClick={() => setInviteOpen(true)}>
+              + 사람 초대
+            </button>
+
+            {inviteOpen && (
+              <InviteModal
+                serverId={server.id}
+                onClose={() => setInviteOpen(false)}
+              />
+            )}
           <h2>{server.name}</h2>
           <button
             className="add-channel-btn"
