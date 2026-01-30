@@ -1,7 +1,7 @@
 import { useVoiceRoom } from "../useVoiceRoom";
 import VoiceUserList from "./VoiceUserList";
 import VoiceControls from "./VoiceControls";
-import "../../styles/VoicePanel.css";
+import "../../styles/VoicePannel.css";
 
 export default function VoiceChannel({ channel, onLeave }) {
   const {

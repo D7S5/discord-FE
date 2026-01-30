@@ -21,7 +21,6 @@ export function useVoiceRoom(roomId) {
     const client = getClient();
     if (!client || !client.connected) return;
 
-    // ✅ 1. WebSocket JOIN 이벤트
     client.publish({
       destination: "/app/voice.join",
       body: JSON.stringify({
@@ -71,7 +70,7 @@ export function useVoiceRoom(roomId) {
     setJoined(true);
   };
 
-  /* 🚪 음성 채널 퇴장 */
+  /*@ 🚪 음성 채널 퇴장 */
   const leaveRoom = () => {
     const client = getClient();
 

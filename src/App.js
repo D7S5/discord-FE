@@ -8,10 +8,13 @@ import DmChatView from "./components/DmChatView";
 import InvitePage from "./pages/InvitePage";
 import "./styles/Variables.css";
 
-const isAuthenticated = () => !!localStorage.getItem("accessToken");
-
 const PrivateRoute = ({ children }) =>
   isAuthenticated() ? children : <Navigate to="/login" replace />;
+
+const isAuthenticated = () => {
+  const token = localStorage.getItem("accessToken");
+  return token && token !== "undefined";
+};
 
 function App() {
   return (
@@ -20,6 +23,7 @@ function App() {
         {/* Public */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/invite/:code" element={<InvitePage />} />
 
         {/* 서버 목록 */}
         <Route
@@ -30,11 +34,13 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/invite/:code" element={<InvitePage />} />
-
-        <Route path="/channels/@me" element={<MePage />}>
-        <Route path=":roomId" element={<DmChatView />} />
-        </Route>
+        
+        <Route path="/channels/@me" element={
+          <PrivateRoute>
+            <MePage />
+          </PrivateRoute>}>
+        
+        <Route path=":roomId" element={<DmChatView />} /></Route>
 
         <Route
           path="/channels/:serverId"

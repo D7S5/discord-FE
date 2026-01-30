@@ -14,11 +14,9 @@ export default function InvitePage() {
   useEffect(() => {
     api.get(`/invites/${code}`)
       .then(res => setInvite(res.data))
-    //   .catch(() => setError("유효하지 않거나 만료된 초대입니다"))
-       .catch(err => {
+      .catch((err) => {
         console.error(err.response?.data);
-        setError("초대 로딩 실패 (콘솔 확인)")
-       })
+        setError("유효하지 않거나 만료된 초대입니다")})
       .finally(() => setLoading(false));
   }, [code]);
 
@@ -31,7 +29,7 @@ export default function InvitePage() {
         navigate(`/login?redirect=/invite/${code}`)
         return ;
     }
-      alert("서버 가입 실패");
+    //   alert("서버 가입 실패");
     }
   };
 

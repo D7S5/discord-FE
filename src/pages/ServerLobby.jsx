@@ -95,17 +95,17 @@ const ServerLobby = () => {
   }
 
   const joinVoiceChannel = (channelId) => {
-  const client = getClient();
-  if (!client?.connected) return;
+    const client = getClient();
+    if (!client?.connected) return;
 
-  client.publish({
-    destination: "/app/voice.join",
-    body: JSON.stringify({
-      serverId,
-      channelId,
-    }),
-  });
-};
+    client.publish({
+      destination: "/app/voice.join",
+      body: JSON.stringify({
+        serverId,
+        channelId,
+      }),
+    });
+  };
 
 const leaveVoiceChannel = (channelId) => {
   const client = getClient();
@@ -194,6 +194,16 @@ const currentVoiceChannel = channels.find(
             )
             ))}
         </div>
+            {currentVoiceChannel && (
+            <VoicePanel
+              channel={currentVoiceChannel}
+              users={voiceUsers[currentVoiceChannelId] || []}
+              onLeave={() => {
+                leaveVoiceChannel(currentVoiceChannelId);
+                setCurrentVoiceChannelId(null);
+              }}
+            />
+          )}
       </aside>
       {/* 채팅 영역 */}
       <main className="channel-content">
@@ -202,16 +212,6 @@ const currentVoiceChannel = channels.find(
 
       {/* 멤버 리스트 */}
       <MemberList members={members} />
-      {currentVoiceChannel && (
-        <VoicePanel
-          channel={currentVoiceChannel}
-          users={voiceUsers[currentVoiceChannelId] || []}
-          onLeave={() => {
-            leaveVoiceChannel(currentVoiceChannelId);
-            setCurrentVoiceChannelId(null);
-          }}
-        />
-      )}
     </div>
     
   );
