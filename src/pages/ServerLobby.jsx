@@ -30,6 +30,9 @@ const ServerLobby = () => {
 
   const [currentVoiceChannelId, setCurrentVoiceChannelId] = useState(null);
 
+  const [myRole, setMyRole] = useState(null);
+  const canInvite = myRole === "OWNER" || myRole === "ADMIN";
+
   useEffect(() => {
     if (!serverId) return 
 
@@ -79,6 +82,7 @@ const ServerLobby = () => {
       setServer(data.server);
       setChannels(data.channels);
       setMembers(data.members || []);
+      setMyRole(data.myRole);
 
       // 첫 채널 자동 진입
       if (!channelId && data.channels.length > 0) {
@@ -138,15 +142,22 @@ const currentVoiceChannel = channels.find(
       <ServerSidebar />
       <aside className="channel-sidebar">
         <div className="server-header">
-          <button className="invite-btn" onClick={() => setInviteOpen(true)}>
-              + 사람 초대
-            </button>
+            {canInvite && (
+              <>
+                <button
+                  className="invite-btn"
+                  onClick={() => setInviteOpen(true)}
+                >
+                  + 사람 초대
+                </button>
 
-            {inviteOpen && (
-              <InviteModal
-                serverId={server.id}
-                onClose={() => setInviteOpen(false)}
-              />
+                {inviteOpen && (
+                  <InviteModal
+                    serverId={server.id}
+                    onClose={() => setInviteOpen(false)}
+                  />
+                )}
+              </>
             )}
           <h2>{server.name}</h2>
           <button

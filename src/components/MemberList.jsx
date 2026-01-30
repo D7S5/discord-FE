@@ -1,4 +1,4 @@
-import "./MemberList.css";
+import "../styles/MemberList.css";
 
 const ROLE_ORDER = ["OWNER", "ADMIN", "MEMBER"];
 const ROLE_LABEL = {
