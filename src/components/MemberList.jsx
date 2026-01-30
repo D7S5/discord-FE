@@ -52,7 +52,7 @@ function MemberSection({ title, members, offline }) {
 
             {grouped[role].map(member => (
               <MemberItem
-                key={member.id}
+                key={member.userId}
                 member={member}
                 offline={offline}
               />
