@@ -31,7 +31,7 @@ const ServerLobby = () => {
   const [currentVoiceChannelId, setCurrentVoiceChannelId] = useState(null);
 
   const [myRole, setMyRole] = useState(null);
-  const canInvite = myRole === "OWNER" || myRole === "ADMIN";
+  const roleAdmin = myRole === "OWNER" || myRole === "ADMIN";
 
   useEffect(() => {
     if (!serverId) return 
@@ -142,7 +142,7 @@ const currentVoiceChannel = channels.find(
       <ServerSidebar />
       <aside className="channel-sidebar">
         <div className="server-header">
-            {canInvite && (
+            {roleAdmin && (
               <>
                 <button
                   className="invite-btn"
@@ -160,12 +160,15 @@ const currentVoiceChannel = channels.find(
               </>
             )}
           <h2>{server.name}</h2>
+          {roleAdmin && (
+            <>
           <button
             className="add-channel-btn"
             onClick={() => setOpenCreateChannel(true)}
           >
             +
           </button>
+
           {openCreateChannel && (
             <CreateChannelModal
               serverId={serverId}
@@ -173,6 +176,8 @@ const currentVoiceChannel = channels.find(
               onCreated={reloadChannels}
             />
           )}
+          </>
+        )}
         </div>
 
         <div className="channel-list">
