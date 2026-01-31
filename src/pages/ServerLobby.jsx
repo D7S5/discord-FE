@@ -128,6 +128,11 @@ const currentVoiceChannel = channels.find(
   c => c.id === currentVoiceChannelId
 );
 
+const fetchMembers = async () => {
+  const res = await api.get(`/channels/${serverId}/members`);
+  setMembers(res.data);
+};
+
   /* ✅ 채널 목록 재로딩 (채널 생성 후 사용) */
   const reloadChannels = async () => {
     if (!serverId) return ;
@@ -227,7 +232,10 @@ const currentVoiceChannel = channels.find(
       </main>
 
       {/* 멤버 리스트 */}
-      <MemberList members={members} />
+      <MemberList members={members}
+                  myRole={myRole}
+                  serverId={serverId}
+                  refetchMembers={fetchMembers} />
     </div>
     
   );

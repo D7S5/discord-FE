@@ -1,4 +1,10 @@
 import "../styles/MemberList.css";
+import api from "../api";
+import { useState } from "react";
+
+/* ===================== */
+/* Role Config           */
+/* ===================== */
 
 const ROLE_ORDER = ["OWNER", "ADMIN", "MEMBER"];
 const ROLE_LABEL = {
@@ -7,23 +13,44 @@ const ROLE_LABEL = {
   MEMBER: "👤 MEMBER",
 };
 
-export default function MemberList({ members = [] }) {
-  const onlineMembers = members.filter(m => m.online);
-  const offlineMembers = members.filter(m => !m.online);
+export default function MemberList({
+  members = [],
+  myRole,
+  serverId,
+  refetchMembers,
+}) {
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  const toggleAdmin = async (userId) => {
+    await api.patch(
+      `/servers/${serverId}/members/${userId}/role/toggle`
+    );
+    setSelectedUserId(null);
+    refetchMembers();
+  };
+
+  const onlineMembers = members.filter((m) => m.online);
+  const offlineMembers = members.filter((m) => !m.online);
 
   return (
     <aside className="member-list">
-      {/* 온라인 */}
       <MemberSection
         title={`온라인 — ${onlineMembers.length}`}
         members={onlineMembers}
+        myRole={myRole}
+        selectedUserId={selectedUserId}
+        onSelect={setSelectedUserId}
+        onToggleAdmin={toggleAdmin}
       />
 
-      {/* 오프라인 */}
       <MemberSection
         title={`오프라인 — ${offlineMembers.length}`}
         members={offlineMembers}
         offline
+        myRole={myRole}
+        selectedUserId={selectedUserId}
+        onSelect={setSelectedUserId}
+        onToggleAdmin={toggleAdmin}
       />
     </aside>
   );
@@ -33,32 +60,51 @@ export default function MemberList({ members = [] }) {
 /* Section by Role       */
 /* ===================== */
 
-function MemberSection({ title, members, offline }) {
+function MemberSection({
+  title,
+  members,
+  offline,
+  myRole,
+  selectedUserId,
+  onSelect,
+  onToggleAdmin,
+}) {
   const grouped = ROLE_ORDER.reduce((acc, role) => {
-    acc[role] = members.filter(m => m.role === role);
+    acc[role] = members.filter((m) => m.role === role);
     return acc;
-    }, {});
+  }, {});
 
   return (
     <div className="member-group">
       <div className="member-group-title">{title}</div>
 
-      {ROLE_ORDER.map(role =>
-        grouped[role].length > 0 ? (
-          <div key={role} className="member-role-group">
-            <div className="member-role-title">
-              {ROLE_LABEL[role]} — {grouped[role].length}
-            </div>
+      {ROLE_ORDER.map(
+        (role) =>
+          grouped[role].length > 0 && (
+            <div key={role} className="member-role-group">
+              <div className="member-role-title">
+                {ROLE_LABEL[role]} — {grouped[role].length}
+              </div>
 
-            {grouped[role].map(member => (
-              <MemberItem
-                key={member.userId}
-                member={member}
-                offline={offline}
-              />
-            ))}
-          </div>
-        ) : null
+              {grouped[role].map((member) => (
+                <MemberItem
+                  key={member.userId}
+                  member={member}
+                  offline={offline}
+                  myRole={myRole}
+                  selected={selectedUserId === member.userId}
+                  onClick={() =>
+                    onSelect(
+                      selectedUserId === member.userId
+                        ? null
+                        : member.userId
+                    )
+                  }
+                  onToggleAdmin={onToggleAdmin}
+                />
+              ))}
+            </div>
+          )
       )}
     </div>
   );
@@ -68,19 +114,58 @@ function MemberSection({ title, members, offline }) {
 /* Member Item           */
 /* ===================== */
 
-function MemberItem({ member, offline }) {
+function MemberItem({
+  member,
+  offline,
+  myRole,
+  selected,
+  onClick,
+  onToggleAdmin,
+}) {
+  const isOwner = myRole === "OWNER";
+  const isMember = member.role === "MEMBER";
+  const isAdmin = member.role === "ADMIN";
+
   return (
-    <div className={`member-item ${offline ? "offline" : ""}`}>
+    <div
+      className={`member-item ${offline ? "offline" : ""} ${
+        selected ? "selected" : ""
+      }`}
+      onClick={onClick}
+    >
       <div className="avatar">
-        {member.username[0]}
-        <span className={`status ${member.online ? "online" : "offline"}`} />
+        {member.username?.[0] ?? "?"}
+        <span className={`status ${offline ? "offline" : "online"}`} />
       </div>
 
-      {/* ⭐ role class 추가 */}
       <span className={`username role-${member.role.toLowerCase()}`}>
         {member.username}
       </span>
+
+      {/* OWNER 전용 버튼 */}
+      {selected && isOwner && isMember && (
+        <button
+          className="member-action admin-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleAdmin(member.userId);
+          }}
+        >
+          🛡 관리자 부여
+        </button>
+      )}
+
+      {selected && isOwner && isAdmin && (
+        <button
+          className="member-action revoke-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleAdmin(member.userId);
+          }}
+        >
+          ❌ 관리자 회수
+        </button>
+      )}
     </div>
   );
 }
-
