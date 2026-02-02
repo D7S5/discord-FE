@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
   connectWebSocket,
-  safePublish
+  getClient
 } from "../websocket";
 import "../styles/ChannelPage.css";
 import api from "../api";
@@ -12,21 +12,24 @@ export default function ChannelPage({ channel }) {
   const bottomRef = useRef(null);
   const subscriptionRef = useRef(null);
 
-  // 메시지 히스토리
   useEffect(() => {
     if (!channel) return;
-
+    
     api.get(`/channels/${channel.id}/messages`)
-      .then(res => setMessages(res.data))
-      .catch(err => console.error("메시지 불러오기 실패", err));
+      .then((res) => {
+        setMessages(res.data);
+      })
+      .catch((err) => {
+        console.error("메시지 불러오기 실패", err);
+      });
   }, [channel]);
 
-  // WebSocket subscribe (⭐ 핵심)
   useEffect(() => {
     if (!channel) return;
+  
+      const client = getClient();
+      if (!client) return;
 
-    connectWebSocket((client) => {
-    
       subscriptionRef.current?.unsubscribe();
 
       subscriptionRef.current = client.subscribe(
@@ -36,12 +39,10 @@ export default function ChannelPage({ channel }) {
           setMessages(prev => [...prev, body]);
         }
       );
-    });
-
     return () => {
       subscriptionRef.current?.unsubscribe();
       subscriptionRef.current = null;
-    };
+    }
   }, [channel]);
 
   useEffect(() => {
@@ -51,24 +52,31 @@ export default function ChannelPage({ channel }) {
   const sendMessage = () => {
     if (!content.trim() || !channel) return;
 
-    safePublish(
-      `/app/channels/${channel.id}/messages`,
-      { content }
-    );
+    const client = getClient();
+    if (!client || !client.connected) {
+      console.warn("STOMP not connected");
+      return;
+    }
+
+    client.publish({
+      destination: `/app/channels/${channel.id}/messages`,
+      body: JSON.stringify({ content }),
+    });
 
     setContent("");
   };
-
   if (!channel) {
     return <div className="empty-channel"></div>;
   }
 
   return (
     <div className="channel-page">
+      {/* 채널 헤더 */}
       <div className="channel-header">
         <span># {channel.name}</span>
       </div>
 
+      {/* 메시지 리스트 */}
       <div className="message-list">
         {messages.map(msg => (
           <MessageItem key={msg.id} message={msg} />
@@ -76,6 +84,7 @@ export default function ChannelPage({ channel }) {
         <div ref={bottomRef} />
       </div>
 
+      {/* 입력창 */}
       <div className="message-input">
         <input
           value={content}
@@ -104,6 +113,7 @@ function MessageItem({ message }) {
             {new Date(message.createdAt).toLocaleTimeString()}
           </span>
         </div>
+
         <div className="message-content">
           {message.content}
         </div>
