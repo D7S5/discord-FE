@@ -1,4 +1,5 @@
 import axios from "axios";
+import { reconnectWebSocket } from "./websocket";
 
 const api = axios.create({
   baseURL: "http://localhost:8080/api",
@@ -24,18 +25,22 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
-const refreshToken = async () => {
-  const res = await axios.post(
-    "http://localhost:8080/api/auth/refresh",
-    {},
-    { withCredentials: true }
-  );
+let refreshPromise = null;
 
-  const newAccessToken = res.data.accessToken;
-  localStorage.setItem("accessToken", newAccessToken);
-  console.log("Refreshing")
-  return newAccessToken;
+const refreshToken = () => {
+  if (!refreshPromise) {
+    refreshPromise = axios.post("/api/auth/refresh", {}, { withCredentials: true })
+      .then(res => {
+        localStorage.setItem("accessToken", res.data.accessToken);
+        return res.data.accessToken;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
 };
+
 
 api.interceptors.response.use(
   (response) => response,
@@ -44,8 +49,7 @@ api.interceptors.response.use(
 
     // accessToken 만료
     if (
-      error.response?.status === 403 &&
-      !originalRequest._retry
+      error.response?.status === 403 && !originalRequest._retry
     ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -65,10 +69,14 @@ api.interceptors.response.use(
 
       try {
         const newToken = await refreshToken();
+
+        reconnectWebSocket();
+
         processQueue(null, newToken);
 
         originalRequest.headers.Authorization =
           `Bearer ${newToken}`;
+
         return api(originalRequest);
       } catch (e) {
         processQueue(e, null);

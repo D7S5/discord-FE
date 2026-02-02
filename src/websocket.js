@@ -35,6 +35,8 @@ export const onRefreshFail = () => {
   disconnectWebSocket();
 };
 
+
+
 /**
  * WebSocket 연결
  */
@@ -110,6 +112,7 @@ export const reconnectWebSocket = () => {
     connectWebSocket();
   }, 100);
 };
+
 
 export const disconnectWebSocket = () => {
   if (client) {

@@ -12,16 +12,14 @@ export default function ChannelPage({ channel }) {
   const bottomRef = useRef(null);
   const subscriptionRef = useRef(null);
 
-  // 메시지 히스토리
   useEffect(() => {
     if (!channel) return;
-
     api.get(`/channels/${channel.id}/messages`)
       .then(res => setMessages(res.data))
       .catch(err => console.error("메시지 불러오기 실패", err));
   }, [channel]);
 
-  // WebSocket subscribe (⭐ 핵심)
+
   useEffect(() => {
     if (!channel) return;
 
