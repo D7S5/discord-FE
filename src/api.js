@@ -29,7 +29,7 @@ let refreshPromise = null;
 
 const refreshToken = () => {
   if (!refreshPromise) {
-    refreshPromise = axios.post("/api/auth/refresh", {}, { withCredentials: true })
+    refreshPromise = api.post("/auth/refresh", {}, { withCredentials: true })
       .then(res => {
         localStorage.setItem("accessToken", res.data.accessToken);
         return res.data.accessToken;

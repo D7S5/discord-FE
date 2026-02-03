@@ -27,7 +27,11 @@ export default function Register() {
 
       navigate("/login");
     } catch (err) {
-      setError("이미 존재하는 이메일이거나 입력값이 올바르지 않습니다.");
+    const message =
+      err.response?.data?.message ||
+      "이미 존재하는 이메일이거나 입력값이 올바르지 않습니다.";
+
+      setError(message);
     }
   };
 
