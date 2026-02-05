@@ -7,6 +7,10 @@ let connecting = false;
 let isRefreshing = false;
 let connectCallbacks = [];
 
+/* =========================
+   Refresh 상태 연동
+========================= */
+
 /**
  * refresh 시작 시 호출
  */
@@ -15,16 +19,14 @@ export const onRefreshStart = () => {
 };
 
 /**
- * refresh 성공 후 호출 (⭐ 중요)
+ * refresh 성공 후 호출 (⭐ 핵심)
  */
 export const onRefreshSuccess = (newAccessToken) => {
   localStorage.setItem("accessToken", newAccessToken);
   isRefreshing = false;
 
-  // 기존 연결 있으면 재연결
-  if (client) {
-    reconnectWebSocket();
-  }
+  // refresh 성공 후에만 재연결
+  reconnectWebSocket(newAccessToken);
 };
 
 /**
@@ -36,15 +38,16 @@ export const onRefreshFail = () => {
 };
 
 
+export const connectWebSocket = (onConnect, overrideToken) => {
+  if (isRefreshing) {
+    console.warn("⏸ refresh 중 → WS connect 차단");
+    return;
+  }
 
-/**
- * WebSocket 연결
- */
-export const connectWebSocket = (onConnect) => {
-  const token = localStorage.getItem("accessToken");
+  const token = overrideToken ?? localStorage.getItem("accessToken");
 
   if (!token) {
-    console.warn("❌ accessToken 없음 → WebSocket 연결 중단");
+    console.warn("❌ accessToken 없음 → WS 연결 중단");
     return;
   }
 
@@ -59,7 +62,7 @@ export const connectWebSocket = (onConnect) => {
     return;
   }
 
-  // 연결 중이면 대기
+  // 연결 중이면 중복 방지
   if (connecting) return;
   connecting = true;
 
@@ -71,7 +74,8 @@ export const connectWebSocket = (onConnect) => {
       Authorization: `Bearer ${token}`,
     },
 
-    reconnectDelay: 5000,
+    reconnectDelay: 0,
+
     heartbeatIncoming: 10000,
     heartbeatOutgoing: 10000,
 
@@ -92,16 +96,14 @@ export const connectWebSocket = (onConnect) => {
     onWebSocketClose: () => {
       console.warn("⚠️ WebSocket closed");
       connecting = false;
+      client = null;
     },
   });
 
   client.activate();
 };
 
-/**
- * WebSocket 재연결 (refresh 이후)
- */
-export const reconnectWebSocket = () => {
+export const reconnectWebSocket = (token) => {
   if (connecting) return;
 
   console.log("🔄 STOMP reconnect");
@@ -109,10 +111,9 @@ export const reconnectWebSocket = () => {
   disconnectWebSocket();
 
   setTimeout(() => {
-    connectWebSocket();
+    connectWebSocket(null, token);
   }, 100);
 };
-
 
 export const disconnectWebSocket = () => {
   if (client) {
@@ -142,5 +143,9 @@ export const safePublish = (destination, body, headers = {}) => {
     headers,
   });
 };
+
+/* =========================
+   Getter
+========================= */
 
 export const getClient = () => client;

@@ -7,7 +7,7 @@ import ChannelPage from "./ChannelPage";
 import MemberList from "../components/MemberList";
 import VoiceChannelItem from "../components/voice/VoiceChannelItem";
 import ServerSidebar from "../components/ServerSidebar";
-import { connectWebSocket, getClient } from "../websocket";
+import { connectWebSocket, getClient, safePublish } from "../websocket";
 import CreateChannelModal from "../components/CreateChannelModal";
 import VoicePanel from "../components/voice/VoicePannel";
 import "../styles/ServerLobby.css";
@@ -102,27 +102,19 @@ const ServerLobby = () => {
     const client = getClient();
     if (!client?.connected) return;
 
-    client.publish({
-      destination: "/app/voice.join",
-      body: JSON.stringify({
-        serverId,
-        channelId,
-      }),
-    });
-  };
+    safePublish(`/app/voice.join`, {
+      serverId, channelId
+    })
+    };
 
 const leaveVoiceChannel = (channelId) => {
   const client = getClient();
   if (!client?.connected) return;
 
-  client.publish({
-    destination: "/app/voice.leave",
-    body: JSON.stringify({
-      serverId,
-      channelId,
-    }),
-  });
-};
+  safePublish(`/app/voice.leave`, {
+    serverId, channelId
+    })
+  };
 
 const currentVoiceChannel = channels.find(
   c => c.id === currentVoiceChannelId

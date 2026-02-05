@@ -17,7 +17,6 @@ export default function Login() {
   const params = new URLSearchParams(location.search);
   const redirect = params.get("redirect") || "/channels";
   
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -68,7 +67,6 @@ export default function Login() {
             {error}
           </div>
         )}
-
 
         <button className="btn btn-primary">로그인</button>
 
