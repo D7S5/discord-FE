@@ -8,99 +8,77 @@ import "../styles/ServerSidebar.css";
 export default function ServerSidebar() {
   const [servers, setServers] = useState([]);
   const [open, setOpen] = useState(false);
-  const [menu, setMenu] = useState(null); 
-  // { serverId, x, y }
+  const [context, setContext] = useState(null);
 
   const navigate = useNavigate();
-  const { serverId } = useParams(); // @me or serverId
+  const { serverId } = useParams();
 
   useEffect(() => {
-    loadServers();
+    api.get("/channels/me").then((res) => {
+      setServers(res.data);
+    });
   }, []);
 
-  const loadServers = async () => {
-    const res = await api.get("/channels/me");
-    setServers(res.data);
-  };
-
-  const handleContextMenu = (e, id) => {
+  const onRightClick = (e, server) => {
     e.preventDefault();
-    setMenu({
-      serverId: id,
+
+    setContext({
       x: e.clientX,
       y: e.clientY,
+      server,
     });
-  };
-
-  const closeMenu = () => setMenu(null);
-
-  const leaveServer = async (id) => {
-    const ok = window.confirm("정말 이 서버에서 나가시겠습니까?");
-    if (!ok) return;
-
-    await api.delete(`/channels/${id}/leave`);
-    setMenu(null);
-    loadServers();
-
-    // 나간 서버 보고 있었다면 @me로 이동
-    if (String(serverId) === String(id)) {
-      navigate("/channels/@me");
-    }
   };
 
   return (
     <>
       <aside className="server-sidebar">
-        {/* ===== @me ===== */}
+        {/* @me */}
         <div
-          className={`server-icon me ${
-            serverId === "@me" ? "active" : ""
-          }`}
+          className={`server-icon me ${serverId === "@me" ? "active" : ""}`}
           onClick={() => navigate("/channels/@me")}
-          title="다이렉트 메시지"
         >
           🟣
         </div>
 
         <div className="server-separator" />
 
-        {/* ===== servers ===== */}
-        {Array.isArray(servers) &&
-          servers.map((s) => (
-            <div
-              key={s.id}
-              className={`server-icon ${
-                String(serverId) === String(s.id) ? "active" : ""
-              }`}
-              onClick={() => navigate(`/channels/${s.id}`)}
-              onContextMenu={(e) => handleContextMenu(e, s.id)}
-              title={s.name}
-            >
-              {s.name?.[0]}
-            </div>
-          ))}
+        {/* servers */}
+        {servers.map((s) => (
+          <div
+            key={s.id}
+            className={`server-icon ${serverId == s.id ? "active" : ""}`}
+            onClick={() => navigate(`/channels/${s.id}`)}
+            onContextMenu={(e) => onRightClick(e, s)}
+            title={s.name}
+          >
+            {s.name?.[0]}
+          </div>
+        ))}
 
-        {/* ===== add server ===== */}
+        {/* add */}
         <div className="server-add" onClick={() => setOpen(true)}>
           +
         </div>
       </aside>
 
-      {menu && (
+      {/* 우클릭 메뉴 */}
+      {context && (
         <ServerContextMenu
-          x={menu.x}
-          y={menu.y}
-          onClose={closeMenu}
-          onLeave={() => leaveServer(menu.serverId)}
+          x={context.x}
+          y={context.y}
+          server={context.server}
+          onClose={() => setContext(null)}
+          onLeave={(id) => {
+            setServers((prev) => prev.filter((s) => s.id !== id));
+            navigate("/channels/@me");
+          }}
         />
       )}
 
       {open && (
         <CreateServerModal
           onClose={() => setOpen(false)}
-          onCreated={(server) =>
-            setServers((prev) => [...prev, server])
-          }
+          onCreated={(server) => setServers((prev) => [...prev, server])}
         />
       )}
     </>
