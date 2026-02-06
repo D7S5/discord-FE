@@ -38,3 +38,34 @@
   border: none;
   color: white;
 }
+
+/* ===== Context Menu ===== */
+
+.context-menu {
+  position: fixed;
+  background: #111214;
+  border-radius: 6px;
+  padding: 6px 0;
+  min-width: 160px;
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.context-menu button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  color: #dbdee1;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.context-menu button:hover {
+  background: #1e1f22;
+}
+
+.context-menu .danger {
+  color: #f23f42;
+}
