@@ -4,7 +4,7 @@ import "../styles/InviteModal.css";
 
 export default function InviteModal({ serverId, onClose }) {
   const [expireMinutes, setExpireMinutes] = useState(1440); // 24h
-  const [maxUses, setMaxUses] = useState(null); // 무제한
+  const [maxUses, setMaxUses] = useState(2147483647); // 무제한
   const [inviteUrl, setInviteUrl] = useState("");
 
   const handleCreate = async () => {
@@ -41,7 +41,7 @@ export default function InviteModal({ serverId, onClose }) {
                 <option value={30}>30분</option>
                 <option value={60}>1시간</option>
                 <option value={1440}>24시간</option>
-                <option value={null}>무제한</option>
+                <option value={1440 *7 }>7일</option>
               </select>
             </div>
 
@@ -55,7 +55,7 @@ export default function InviteModal({ serverId, onClose }) {
               >
                 <option value={1}>1회</option>
                 <option value={5}>5회</option>
-                <option value="null">무제한</option>
+                <option value={2147483647}>무제한</option>
               </select>
             </div>
 
