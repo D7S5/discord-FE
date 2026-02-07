@@ -7,6 +7,7 @@ import MePage from "./pages/MePage";
 import DmChatView from "./components/DmChatView";
 import InvitePage from "./pages/InvitePage";
 import "./styles/Variables.css";
+import ServerSettings from "./components/ServerSettings";
 
 const PrivateRoute = ({ children }) =>
   isAuthenticated() ? children : <Navigate to="/login" replace />;
@@ -24,6 +25,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/invite/:code" element={<InvitePage />} />
+        <Route path="/channels/:serverId/settings" element={<ServerSettings />} />
+
 
         {/* 서버 목록 */}
         <Route

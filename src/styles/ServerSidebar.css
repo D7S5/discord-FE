@@ -69,3 +69,30 @@
 .context-menu .danger {
   color: #f23f42;
 }
+
+
+.server-icon {
+  width: 48px;              /* 디스코드 느낌 */
+  height: 48px;
+  border-radius: 50%;
+  background: #313338;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  overflow: hidden;         /* ⭐ 필수 */
+  margin-bottom: 8px;
+
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.server-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* ⭐ 이거 없으면 또 깨짐 */
+  border-radius: 50%;
+}
