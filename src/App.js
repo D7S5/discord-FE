@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ServerListPage from "./pages/ServerListPage";
+// import ServerListPage from "./pages/ServerListPage";
 import ServerLobby from "./pages/ServerLobby";
 import MePage from "./pages/MePage";
 import DmChatView from "./components/DmChatView";
 import InvitePage from "./pages/InvitePage";
 import "./styles/Variables.css";
 import ServerSettings from "./components/ServerSettings";
+import ServerSidebar from "./components/ServerSidebar";
 
 const PrivateRoute = ({ children }) =>
   isAuthenticated() ? children : <Navigate to="/login" replace />;
@@ -33,7 +34,7 @@ function App() {
           path="/channels"
           element={
             <PrivateRoute>
-              <ServerListPage />
+              <ServerSidebar />
             </PrivateRoute>
           }
         />
