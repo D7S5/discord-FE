@@ -1,76 +1,61 @@
-/* ===== 채널 페이지 ===== */
+/* 전체 채널 페이지 */
 .channel-page {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #313338;
-  color: #dbdee1;
-  font-size: 15px;
+  background-color: #313338; /* 디스코드 메인 배경 */
+  color: #dcddde;
 }
 
-/* ===== 채널 헤더 ===== */
+/* 상단 헤더 */
 .channel-header {
   height: 48px;
-  padding: 0 16px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #1f2023;
+  padding: 0 16px;
+  border-bottom: 1px solid #1f2225;
   font-weight: 600;
   color: #f2f3f5;
 }
 
-/* ===== 메시지 리스트 ===== */
+/* 메시지 리스트 */
 .message-list {
   flex: 1;
   overflow-y: auto;
   padding: 16px 0;
 }
 
-/* 스크롤바 (디스코드 느낌) */
-.message-list::-webkit-scrollbar {
-  width: 8px;
-}
-.message-list::-webkit-scrollbar-thumb {
-  background: #1a1b1e;
-  border-radius: 4px;
-}
-.message-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* ===== 메시지 아이템 ===== */
+/* 메시지 아이템 */
 .message-item {
   display: flex;
-  align-items: flex-start;
   padding: 6px 16px;
 }
 
 .message-item:hover {
-  background-color: #2e3035;
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
-/* ===== 아바타 ===== */
+/* 아바타 */
 .message-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: #5865f2;
-  color: white;
-  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: bold;
+  color: white;
   margin-right: 12px;
   flex-shrink: 0;
 }
 
-/* ===== 메시지 본문 ===== */
+/* 메시지 본문 */
 .message-body {
-  display: flex;
-  flex-direction: column;
+  flex: 1;
 }
 
-/* 작성자 + 시간 */
+/* 메타 정보 */
 .message-meta {
   display: flex;
   align-items: center;
@@ -87,36 +72,103 @@
   color: #949ba4;
 }
 
-/* 메시지 텍스트 */
+/* 메시지 내용 */
 .message-content {
   margin-top: 2px;
-  line-height: 1.4;
   white-space: pre-wrap;
   word-break: break-word;
+  line-height: 1.4;
 }
 
-/* ===== 입력창 ===== */
+/* 채팅 이미지 */
+.chat-image {
+  max-width: 360px;
+  max-height: 240px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.chat-image:hover {
+  opacity: 0.9;
+}
+
+/* 입력 영역 */
 .message-input {
   padding: 12px 16px;
-  border-top: 1px solid #1f2023;
+  border-top: 1px solid #1f2225;
+}
+
+/* textarea */
+.message-input textarea {
+  width: 100%;
+  min-height: 44px;
+  max-height: 200px;
+  resize: none;
+
+  background-color: #383a40;
+  color: #dcddde;
+
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+
+  font-size: 14px;
+  line-height: 1.4;
+
+  outline: none;
+}
+
+/* 포커스 */
+.message-input textarea:focus {
+  background-color: #404249;
+}
+
+/* 이미지 모달 */
+.image-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.image-modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+}
+
+/* 빈 채널 */
+.empty-channel {
+  flex: 1;
   background-color: #313338;
 }
 
-.message-input input {
-  width: 100%;
-  padding: 12px 14px;
-  background-color: #383a40;
-  border: none;
+/* ===== 디스코드 스타일 스크롤바 ===== */
+
+/* 크롬, 엣지, 사파리 */
+.message-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.message-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+  background-color: #1a1b1e;
   border-radius: 8px;
-  color: #dbdee1;
-  font-size: 15px;
 }
 
-.message-input input::placeholder {
-  color: #949ba4;
+.message-list::-webkit-scrollbar-thumb:hover {
+  background-color: #232428;
 }
 
-.message-input input:focus {
-  outline: none;
+/* 파이어폭스 */
+.message-list {
+  scrollbar-width: thin;
+  scrollbar-color: #1a1b1e transparent;
 }
-  
