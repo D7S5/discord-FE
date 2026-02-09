@@ -39,8 +39,8 @@ export default function ProfileImageModal({
     formData.append("image", file);
 
     try {
-      const res = await api.post("/users/profile-image", formData);
-      onUploaded(res.data.profileImageUrl);
+      const res = await api.post("/me/avatar", formData);
+      onUploaded(res.data.iconUrl);
       onClose();
     } catch (e) {
       console.error(e);

@@ -194,7 +194,15 @@ function MessageItem({ message, onImageClick }) {
         className={`message-avatar ${isMe ? "clickable" : ""}`}
         onClick={goProfileSettings}
       >
-        {message.senderName?.[0] ?? "?"}
+        {message.senderIconUrl ? (
+          <img
+            src={`http://localhost:8080${message.senderIconUrl}`}
+            className="avatar-image"
+            alt="avatar"
+          />
+        ) : (
+          message.senderName?.[0] ?? "?"
+        )}
       </div>
       <div className="message-body">
         <div className="message-meta">

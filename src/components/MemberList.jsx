@@ -126,6 +126,10 @@ function MemberItem({
   const isMember = member.role === "MEMBER";
   const isAdmin = member.role === "ADMIN";
 
+  const avatarUrl = member.iconUrl
+    ? `http://localhost:8080${member.iconUrl}`
+    : null;
+
   return (
     <div
       className={`member-item ${offline ? "offline" : ""} ${
@@ -134,7 +138,19 @@ function MemberItem({
       onClick={onClick}
     >
       <div className="avatar">
-        {member.username?.[0] ?? "?"}
+        {avatarUrl ? (
+          <img
+            src={avatarUrl}
+            alt="avatar"
+            className="avatar-img"
+            draggable={false}
+          />
+        ) : (
+          <span className="avatar-fallback">
+            {member.username?.[0] ?? "?"}
+          </span>
+        )}
+
         <span className={`status ${offline ? "offline" : "online"}`} />
       </div>
 
