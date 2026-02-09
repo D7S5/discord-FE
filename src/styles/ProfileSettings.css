@@ -1,0 +1,20 @@
+/* 클릭 가능 표시 */
+.clickable {
+  cursor: pointer;
+}
+
+.message-author.clickable:hover {
+  text-decoration: underline;
+}
+
+.message-avatar.clickable:hover {
+  filter: brightness(1.1);
+}
+
+/* 설정 페이지 */
+.profile-settings-page {
+  padding: 32px;
+  color: #f2f3f5;
+  background: #313338;
+  min-height: 100vh;
+}

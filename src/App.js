@@ -9,6 +9,7 @@ import InvitePage from "./pages/InvitePage";
 import "./styles/Variables.css";
 import ServerSettings from "./components/ServerSettings";
 import ServerSidebar from "./components/ServerSidebar";
+import ProfileSettings from "./components/ProfileSettings";
 
 const PrivateRoute = ({ children }) =>
   isAuthenticated() ? children : <Navigate to="/login" replace />;
@@ -27,6 +28,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/invite/:code" element={<InvitePage />} />
         <Route path="/channels/:serverId/settings" element={<ServerSettings />} />
+        <Route path="/settings/profile" element={<ProfileSettings />} />
 
 
         {/* 서버 목록 */}

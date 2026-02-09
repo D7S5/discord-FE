@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   connectWebSocket,
   safePublish
@@ -32,7 +33,6 @@ export default function ChannelPage({ channel }) {
         `/topic/channels/${channel.id}`,
         (msg) => {
           const body = JSON.parse(msg.body);
-          console.log("받은 메시지", body);
           setMessages(prev => [...prev, body]);
         }
       );
@@ -48,6 +48,7 @@ export default function ChannelPage({ channel }) {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   // ESC 키로 이미지 모달 닫기
   useEffect(() => {
     if (!previewImage) return;
@@ -61,7 +62,6 @@ export default function ChannelPage({ channel }) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [previewImage]);
-
 
   // 텍스트 전송
   const sendText = () => {
@@ -80,9 +80,6 @@ export default function ChannelPage({ channel }) {
 
   // 이미지 업로드
   const uploadImage = async (file) => {
-    
-    console.log("업로드 파일", file, file.type);
-
     const formData = new FormData();
     formData.append("image", file);
 
@@ -126,9 +123,11 @@ export default function ChannelPage({ channel }) {
 
       <div className="message-list">
         {messages.map(msg => (
-          <MessageItem key={msg.id}
-                        message={msg}
-                        onImageClick={setPreviewImage}/>
+          <MessageItem
+            key={msg.id}
+            message={msg}
+            onImageClick={setPreviewImage}
+          />
         ))}
         <div ref={bottomRef} />
       </div>
@@ -147,22 +146,43 @@ export default function ChannelPage({ channel }) {
           placeholder="메시지를 입력하세요"
         />
       </div>
+
       {previewImage && (
-          <div
-            className="image-modal"
-            onClick={() => setPreviewImage(null)}
-          >
-            <img
-              src={previewImage}
-              className="image-modal-content"
-              onClick={e => e.stopPropagation()}
-            />
-          </div>
-        )}
+        <div
+          className="image-modal"
+          onClick={() => setPreviewImage(null)}
+        >
+          <img
+            src={previewImage}
+            className="image-modal-content"
+            onClick={e => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }
+
+/* ================= MessageItem ================= */
+
 function MessageItem({ message, onImageClick }) {
+  const navigate = useNavigate();
+
+  const myUserId = localStorage.getItem("userId");
+  const isMe = String(message.senderId) === String(myUserId);
+
+  const goProfileSettings = () => {
+  console.log("🔥 avatar click", {
+    senderId: message.senderId,
+    myUserId,
+  });
+
+  if (isMe) {
+    navigate("/settings/profile");
+  }
+};
+
+
   const isImage = message.content?.startsWith("/images/chat");
   const imageUrl = isImage
     ? `http://localhost:8080${message.content}`
@@ -170,13 +190,21 @@ function MessageItem({ message, onImageClick }) {
 
   return (
     <div className="message-item">
-      <div className="message-avatar">
+      <div
+        className={`message-avatar ${isMe ? "clickable" : ""}`}
+        onClick={goProfileSettings}
+      >
         {message.senderName?.[0] ?? "?"}
       </div>
-
       <div className="message-body">
         <div className="message-meta">
-          <span className="message-author">{message.senderName}</span>
+          <span
+            className={`message-author ${isMe ? "clickable" : ""}`}
+            onClick={goProfileSettings}
+          >
+            {message.senderName}
+          </span>
+
           <span className="message-time">
             {new Date(message.createdAt).toLocaleTimeString()}
           </span>
@@ -187,7 +215,7 @@ function MessageItem({ message, onImageClick }) {
             <img
               src={imageUrl}
               className="chat-image"
-              onClick={() => onImageClick?.(imageUrl)} // ❗ 방어
+              onClick={() => onImageClick?.(imageUrl)}
             />
           ) : (
             message.content

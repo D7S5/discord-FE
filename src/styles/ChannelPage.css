@@ -6,6 +6,11 @@
   background-color: #313338; /* 디스코드 메인 배경 */
   color: #dcddde;
 }
+.channel-content {
+  display: flex;
+  width: 100%;
+}
+
 
 /* 상단 헤더 */
 .channel-header {
@@ -29,7 +34,9 @@
 .message-item {
   display: flex;
   padding: 6px 16px;
+  position: relative;
 }
+
 
 .message-item:hover {
   background-color: rgba(255, 255, 255, 0.02);
@@ -48,11 +55,16 @@
   color: white;
   margin-right: 12px;
   flex-shrink: 0;
+  position: relative;
+  z-index: 50;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 /* 메시지 본문 */
 .message-body {
-  flex: 1;
+  position: relative;
+  z-index: 1;
 }
 
 /* 메타 정보 */
@@ -93,31 +105,39 @@
   opacity: 0.9;
 }
 
-/* 입력 영역 */
+/* ===== 메시지 입력 영역 ===== */
 .message-input {
-  padding: 12px 16px;
-  border-top: 1px solid #1f2225;
-}
-
-/* textarea */
-.message-input textarea {
   width: 100%;
+  flex-shrink: 0;
+
+  padding: 12px 16px;
+  background-color: #313338;
+  border-top: 1px solid #1f2023;
+
+  display: flex;
+}
+/* textarea가 가로 전체 차지 */
+.message-input textarea {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+
   min-height: 44px;
   max-height: 200px;
+
   resize: none;
+  padding: 10px 12px;
 
   background-color: #383a40;
   color: #dcddde;
 
   border: none;
   border-radius: 8px;
-  padding: 10px 12px;
-
-  font-size: 14px;
-  line-height: 1.4;
-
   outline: none;
+
+  font-size: 15px;
 }
+
 
 /* 포커스 */
 .message-input textarea:focus {

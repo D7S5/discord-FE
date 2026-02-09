@@ -1,0 +1,81 @@
+/* ===== Avatar ===== */
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.profile-avatar:hover {
+  opacity: 0.85;
+}
+
+/* ===== Modal Backdrop ===== */
+.profile-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+
+/* ===== Modal ===== */
+.profile-modal {
+  width: 320px; /* 고정 너비 */
+  background: #2b2d31;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-modal h3 {
+  color: #f2f3f5;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+/* ===== Avatar Preview ===== */
+.profile-modal-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 14px;
+}
+
+/* ===== Upload Button ===== */
+.profile-upload-btn {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #5865f2;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.profile-upload-btn:hover {
+  background: #4752c4;
+}
+
+/* ===== Save Button ===== */
+.profile-save-btn {
+  width: 100%;
+  padding: 10px;
+  background: #3ba55d;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

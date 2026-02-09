@@ -28,6 +28,8 @@ export default function Login() {
       });
       
       localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("userId", res.data.userId);
+
       navigate(redirect);
     } catch (err) {
       setError("이메일 또는 비밀번호가 올바르지 않습니다.");
