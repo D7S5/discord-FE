@@ -51,10 +51,10 @@
 /* ===== 아바타 ===== */
 .avatar {
   position: relative;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background-color: #1e1f22;
+  background-color: #5865f2;
   flex-shrink: 0;
   display: flex;
   align-items: center;
