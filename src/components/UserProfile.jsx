@@ -17,7 +17,7 @@ export default function UserProfile({ userId }) {
         console.log(res);
         setProfileImage(res.data.iconUrl);
         setNickname(res.data.username);
-        // setStatus(res.data.statusMessage ?? "");
+        setStatus(res.data.statusMessage ?? "");
       })
       .catch((err) =>
         console.error("유저 정보 불러오기 실패", err)
@@ -27,7 +27,7 @@ export default function UserProfile({ userId }) {
   /* ===== 저장 ===== */
   const saveProfile = async () => {
     try {
-      await api.patch(`/me/profile`, {
+      await api.patch(`/users/me/profile`, {
         nickname,
         status,
       });
