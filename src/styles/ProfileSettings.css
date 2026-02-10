@@ -1,20 +1,227 @@
-/* 클릭 가능 표시 */
-.clickable {
+/* ===============================
+   전체 레이아웃
+================================ */
+
+.profile-settings-layout {
+  display: flex;
+  height: 100vh;
+  background-color: #313338;
+  color: #ffffff;
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+
+/* ===============================
+   사이드바
+================================ */
+
+.settings-sidebar {
+  width: 240px;
+  background-color: #2b2d31;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.sidebar-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b5bac1;
+  margin-bottom: 12px;
+}
+
+.sidebar-item {
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #dbdee1;
+}
+
+.sidebar-item:hover {
+  background-color: #35373c;
+}
+
+.sidebar-item.active {
+  background-color: #404249;
+  color: #ffffff;
+}
+
+/* ===============================
+   메인 컨텐츠
+================================ */
+
+.profile-settings-content {
+  flex: 1;
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* ===============================
+   프로필 편집 레이아웃
+================================ */
+
+.profile-editor-layout {
+  display: flex;
+  gap: 48px;
+  width: 100%;
+  max-width: 900px; /* 🔥 핵심: 중앙 고정 */
+}
+
+/* ===============================
+   왼쪽: 편집 영역
+================================ */
+
+.profile-editor-form {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+.profile-editor-form h2 {
+  margin-bottom: 20px;
+}
+
+.avatar-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.avatar-edit-text {
+  font-size: 12px;
+  color: #b5bac1;
+}
+
+/* 프로필 아바타 */
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover; 
+}
+.profile-avatar.clickable {
   cursor: pointer;
 }
 
-.message-author.clickable:hover {
-  text-decoration: underline;
+/* ===============================
+   입력 필드
+================================ */
+
+.profile-editor-form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #b5bac1;
+  margin-top: 16px;
+  margin-bottom: 4px;
 }
 
-.message-avatar.clickable:hover {
-  filter: brightness(1.1);
+.profile-editor-form input {
+  width: 100%;
+  padding: 8px 10px;
+  background-color: #1e1f22;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-/* 설정 페이지 */
-.profile-settings-page {
-  padding: 32px;
-  color: #f2f3f5;
-  background: #313338;
-  min-height: 100vh;
+.profile-editor-form input:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px #5865f2;
+}
+
+/* ===============================
+   저장 버튼
+================================ */
+
+.save-btn {
+  margin-top: 24px;
+  width: 100%;
+  background-color: #5865f2;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #4752c4;
+}
+
+/* ===============================
+   오른쪽: 미리보기 영역
+================================ */
+
+.profile-preview {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* 디스코드처럼 스크롤 고정 */
+.preview-card {
+  position: relative;   /* 🔥 이게 제일 중요 */
+  width: 260px;
+  background-color: #1e1f22;
+  border-radius: 8px;
+  padding-top: 60px;    /* 아바타 공간 확보 */
+  padding-bottom: 16px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+
+
+/* ===============================
+   미리보기 카드 내부
+================================ */
+.preview-avatar {
+  position: absolute;
+  top: 16px;            /* 카드 상단에서 살짝 내려오기 */
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+
+  object-fit: cover;
+  background-color: #2b2d31;
+  border: 4px solid #1e1f22; /* 🔥 디스코드 느낌 */
+}
+
+.preview-name {
+  margin-top: 48px;   /* 아바타 아래 간격 */
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.preview-status {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #b5bac1;
+}
+/* ===============================
+   반응형 (작은 화면)
+================================ */
+
+@media (max-width: 900px) {
+  .profile-editor-layout {
+    flex-direction: column;
+  }
+
+  .profile-preview {
+    margin-top: 24px;
+  }
+
+  .preview-card {
+    position: static;
+  }
 }
