@@ -11,7 +11,6 @@ export default function ServerContextMenu({
 }) {
   const navigate = useNavigate();
 
-  // 🔴 여기 중요
   const isOwner = server.owner === true;
 
   const leaveServer = async () => {

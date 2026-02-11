@@ -67,13 +67,10 @@ export default function ServerSidebar() {
           </div>
         ))}
 
-        {/* ===== add server ===== */}
         <div className="server-add" onClick={() => setOpen(true)}>
           +
         </div>
       </aside>
-
-      {/* ===== 우클릭 메뉴 ===== */}
       {context && (
         <ServerContextMenu
           x={context.x}
@@ -81,11 +78,10 @@ export default function ServerSidebar() {
           server={context.server}
           onClose={() => setContext(null)}
           onLeave={(id) => {
-            // 즉시 UI 반영
             setServers((prev) => prev.filter((s) => s.id !== id));
             navigate("/channels/@me");
           }}
-          onUpdated={reloadServers} // ⭐ 서버 삭제 / 설정 변경 시
+          onUpdated={reloadServers}
         />
       )}
 

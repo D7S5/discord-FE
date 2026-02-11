@@ -24,3 +24,16 @@
 .server-context-menu .danger {
   color: #f04747;
 }
+
+.server-context-menu .danger:hover {
+  background: #2b2d31;
+}
+
+.server-context-menu button.danger {
+  background: none;        /* 🔥 기본 배경 제거 */
+  color: #f04747;
+}
+
+.server-context-menu button.danger:hover {
+  background: rgba(240, 71, 71, 0.15);
+}

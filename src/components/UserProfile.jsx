@@ -3,46 +3,55 @@ import ProfileAvatar from "./ProfileAvatar";
 import ProfileImageModal from "./ProfileImageModal";
 import api from "../api";
 import "../styles/ProfileSettings.css";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function UserProfile({ userId }) {
   const [open, setOpen] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
-  const [nickname, setNickname] = useState("");
+  const [username, setUsername] = useState("");
   const [status, setStatus] = useState("");
 
-  /* ===== 유저 정보 로드 ===== */
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     api.get(`/users/me`)
       .then((res) => {
         console.log(res);
         setProfileImage(res.data.iconUrl);
-        setNickname(res.data.username);
+        setUsername(res.data.username);
         setStatus(res.data.statusMessage ?? "");
       })
       .catch((err) =>
         console.error("유저 정보 불러오기 실패", err)
       );
-  }, [userId]);
+  }, []);
 
-  /* ===== 저장 ===== */
   const saveProfile = async () => {
     try {
       await api.patch(`/users/me/profile`, {
-        nickname,
+        username,
         status,
-      });
+      });      
       alert("프로필 저장 완료");
+      
+    navigate(-1);
     } catch (e) {
       alert("프로필 저장 실패");
     }
   };
 
+  const imageSrc = profileImage
+    ? profileImage.startsWith("http")
+    ? profileImage
+    : `http://localhost:8080${profileImage}`
+    : "/default-avatar.png";
+
   return (
     <>
-      <h2>프로필</h2>
+      <h2>-  프로필</h2>
 
       <div className="profile-editor-layout">
-        {/* ===== 왼쪽 편집 영역 ===== */}
         <div className="profile-editor-form">
           <div className="avatar-edit-row">
             <ProfileAvatar
@@ -56,8 +65,8 @@ export default function UserProfile({ userId }) {
 
           <label>별명</label>
           <input
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           <label>상태 메시지</label>
@@ -76,16 +85,11 @@ export default function UserProfile({ userId }) {
         <div className="profile-preview">
           <div className="preview-card">
             <img
-              src={
-                profileImage
-                  ? profileImage.startsWith("http")
-                    ? profileImage
-                    : `http://localhost:8080${profileImage}`
-                  : "/default-avatar.png"
+              src={imageSrc
               }
               className="preview-avatar"
             />
-            <div className="preview-name">{nickname}</div>
+            <div className="preview-name">{username}</div>
             {status && (
               <div className="preview-status">{status}</div>
             )}
