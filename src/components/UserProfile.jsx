@@ -5,7 +5,7 @@ import api from "../api";
 import "../styles/ProfileSettings.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function UserProfile({ userId }) {
+export default function UserProfile({ }) {
   const [open, setOpen] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [username, setUsername] = useState("");
@@ -49,8 +49,6 @@ export default function UserProfile({ userId }) {
 
   return (
     <>
-      <h2>-  프로필</h2>
-
       <div className="profile-editor-layout">
         <div className="profile-editor-form">
           <div className="avatar-edit-row">

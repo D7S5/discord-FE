@@ -2,7 +2,7 @@ import UserProfile from "../components/UserProfile";
 import "../styles/ProfileSettings.css";
 
 export default function ProfileSettingsPage() {
-  const userId = JSON.parse(localStorage.getItem("userId"));
+  const userId = localStorage.getItem("userId");
 
   return (
     <div className="profile-settings-layout">
