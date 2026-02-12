@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import api from "../api";
+import { FcGoogle } from "react-icons/fc";
 
 import "../styles/AuthLayout.css";
 import "../styles/Form.css";
@@ -94,12 +95,13 @@ export default function Login() {
 
         {/* 🔥 Google 로그인 버튼 */}
         <button
-          type="button"
-          className="btn btn-google"
-          onClick={handleGoogleLogin}
-        >
-          Google로 로그인
-        </button>
+            type="button"
+            className="btn btn-google"
+            onClick={handleGoogleLogin}
+          >
+            <FcGoogle style={{ marginRight: "8px", fontSize: "18px" }} />
+            Google로 로그인
+          </button>
 
         <button
           type="button"
