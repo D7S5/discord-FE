@@ -18,7 +18,14 @@ const VoiceChannelItem = ({ channel, users = [], selected, onClick }) => {
         {users.map(user => (
           <div key={user.id} className="voice-user-row">
             <span className="voice-user-avatar">
-              {user.name[0]}
+              {user.iconUrl ? (
+                <img
+                  src={`http://localhost:8080${user.iconUrl}` || "/images/avatar/default-avatar.png"}
+                  alt="avatar"
+                />
+              ) : (
+                user.name[0]
+              )}
             </span>
             <span className="voice-user-name">
               {user.name}

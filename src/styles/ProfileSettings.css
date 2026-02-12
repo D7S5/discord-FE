@@ -52,6 +52,7 @@
   flex: 1;
   padding: 60px 80px;
   overflow-y: auto;
+  animation: fadeIn 0.25s ease-out;
 }
 
 /* ===== 카드 스타일 ===== */
@@ -150,3 +151,16 @@
   font-size: 14px;
   color: #b5bac1;
 }
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

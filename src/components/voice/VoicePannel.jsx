@@ -12,6 +12,7 @@ export default function VoiceChannel({ channel, onLeave }) {
   } = useVoiceRoom(channel.id);
 
   const handleLeave = () => {
+    console.log(users);
     leaveRoom();
     onLeave?.();
   };

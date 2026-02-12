@@ -9,6 +9,7 @@ export default function ProfileImageModal({
 }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // 미리보기
   useEffect(() => {
@@ -35,18 +36,39 @@ export default function ProfileImageModal({
   const upload = async () => {
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("image", file);
-
     try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("image", file);
+
       const res = await api.post("/me/avatar", formData);
       onUploaded(res.data.iconUrl);
       onClose();
     } catch (e) {
       console.error(e);
       alert("프로필 이미지 업로드 실패");
+    } finally {
+      setLoading(false);
     }
   };
+
+
+   const deleteAvatar = async () => {
+    if (!window.confirm("기본 프로필 이미지로 변경할까요?")) return;
+
+    try {
+      setLoading(true);
+      await api.delete("/me/avatar");
+      onUploaded(null);
+      onClose();
+    } catch (e) {
+      console.error(e);
+      alert("기본 이미지 변경 실패");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div className="profile-modal-backdrop" onClick={onClose}>
@@ -59,10 +81,10 @@ export default function ProfileImageModal({
         <img
           className="profile-modal-avatar"
           src={
-            preview
+            preview 
               ? preview
               : currentImage
-              ? `http://localhost:8080${currentImage}`
+              ? `http://localhost:8080${currentImage}?t=${Date.now()}`
               : "/default-avatar.png"
           }
           alt="preview"
@@ -77,6 +99,16 @@ export default function ProfileImageModal({
             onChange={(e) => setFile(e.target.files[0])}
           />
         </label>
+        {currentImage && (
+          <button
+            className="profile-reset-btn"
+            disabled={loading}
+            onClick={deleteAvatar}
+          >
+            기본 이미지로 변경
+          </button>
+        )}
+        
 
         <button
           className="profile-save-btn"
@@ -85,6 +117,7 @@ export default function ProfileImageModal({
         >
           저장
         </button>
+        
       </div>
     </div>
   );

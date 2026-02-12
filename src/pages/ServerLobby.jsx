@@ -9,7 +9,7 @@ import VoiceChannelItem from "../components/voice/VoiceChannelItem";
 import ServerSidebar from "../components/ServerSidebar";
 import { connectWebSocket, getClient, safePublish } from "../websocket";
 import CreateChannelModal from "../components/CreateChannelModal";
-import VoicePanel from "../components/voice/VoicePannel";
+import VoicePannel from "../components/voice/VoicePannel";
 import "../styles/ServerLobby.css";
 import InviteModal from "./InviteModal";
 
@@ -40,8 +40,10 @@ const ServerLobby = () => {
 
     client.subscribe(`/topic/voice/${serverId}`, msg => {
       const event = JSON.parse(msg.body);
+      console.log("VOICE EVENT:", event);
 
       if (event.type === "JOIN") {
+        
         setVoiceUsers(prev => ({
           ...prev,
           [event.channelId]: [...(prev[event.channelId] || []), event.userId],
@@ -84,6 +86,9 @@ const ServerLobby = () => {
       setMembers(data.members || []);
       setMyRole(data.myRole);
 
+      console.log("=== members ===");
+      console.log(data.members);
+
       // 첫 채널 자동 진입
       if (!channelId && data.channels.length > 0) {
         navigate(`/channels/${serverId}/${data.channels[0].id}`, {
@@ -125,7 +130,6 @@ const fetchMembers = async () => {
   setMembers(res.data);
 };
 
-  /* ✅ 채널 목록 재로딩 (채널 생성 후 사용) */
   const reloadChannels = async () => {
     if (!serverId) return ;
     const res = await api.get(`/channels/${serverId}/lobby`);
@@ -181,20 +185,22 @@ const fetchMembers = async () => {
           {channels.map(channel => (
             channel.type === "VOICE" ? (
               <VoiceChannelItem
-                key={channel.id}
-                channel={channel}
-                users={voiceUsers[channel.id] || []}
-                selected={currentVoiceChannelId === channel.id}
-                onClick={() => {
-                  if (currentVoiceChannelId !== channel.id) {
-                    if (currentVoiceChannelId) {
-                      leaveVoiceChannel(currentVoiceChannelId);
+                  key={channel.id}
+                  channel={channel}
+                  users={(voiceUsers[channel.id] || []).map(userId =>
+                    members.find(m => m.userId === userId)
+                  ).filter(Boolean)}
+                  selected={currentVoiceChannelId === channel.id}
+                  onClick={() => {
+                    if (currentVoiceChannelId !== channel.id) {
+                      if (currentVoiceChannelId) {
+                        leaveVoiceChannel(currentVoiceChannelId);
+                      }
+                      joinVoiceChannel(channel.id);
+                      setCurrentVoiceChannelId(channel.id);
                     }
-                    joinVoiceChannel(channel.id);
-                    setCurrentVoiceChannelId(channel.id);
-                  }
-                }}
-              />
+                  }}
+                />
             ) : (
               <ChannelItem
                 key={channel.id}
@@ -208,7 +214,7 @@ const fetchMembers = async () => {
             ))}
         </div>
             {currentVoiceChannel && (
-            <VoicePanel
+            <VoicePannel
               channel={currentVoiceChannel}
               users={voiceUsers[currentVoiceChannelId] || []}
               onLeave={() => {

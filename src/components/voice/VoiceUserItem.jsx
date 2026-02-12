@@ -6,10 +6,13 @@ export default function VoiceUserItem({ user }) {
     <div className={`voice-user ${user.speaking ? "speaking" : ""}`}>
       <div className="avatar-wrapper">
         <img
-          src={user.avatarUrl || "/default-avatar.png"}
-          alt={user.username}
-          className="avatar"
-        />
+            src={`http://localhost:8080${user.iconUrl}` || "/images/avatar/default-avatar.png"}
+            alt={user.username}
+            className="avatar"
+            onError={(e) => {
+              e.target.src = "/images/avatar/default-avatar.png";
+            }}
+          />
         {user.speaking && <span className="speaking-ring" />}
       </div>
 

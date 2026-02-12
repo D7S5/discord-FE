@@ -5,7 +5,7 @@ export default function VoiceRoomList({ onJoin }) {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    api.get("/api/voice/rooms").then(res => setRooms(res.data));
+    api.get("/voice/rooms").then(res => setRooms(res.data));
   }, []);
 
   return (
