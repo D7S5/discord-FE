@@ -40,7 +40,6 @@ const ServerLobby = () => {
 
     client.subscribe(`/topic/voice/${serverId}`, msg => {
       const event = JSON.parse(msg.body);
-      console.log("VOICE EVENT:", event);
 
       if (event.type === "JOIN") {
         
@@ -85,9 +84,6 @@ const ServerLobby = () => {
       setChannels(data.channels);
       setMembers(data.members || []);
       setMyRole(data.myRole);
-
-      console.log("=== members ===");
-      console.log(data.members);
 
       // 첫 채널 자동 진입
       if (!channelId && data.channels.length > 0) {

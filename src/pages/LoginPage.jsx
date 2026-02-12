@@ -8,15 +8,15 @@ import "../styles/Button.css";
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const location = useLocation();
   const params = new URLSearchParams(location.search);
   const redirect = params.get("redirect") || "/channels";
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -26,7 +26,7 @@ export default function Login() {
         email,
         password,
       });
-      
+
       localStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("userId", res.data.userId);
 
@@ -34,6 +34,12 @@ export default function Login() {
     } catch (err) {
       setError("이메일 또는 비밀번호가 올바르지 않습니다.");
     }
+  };
+
+  // ✅ OAuth2 로그인
+  const handleGoogleLogin = () => {
+    window.location.href =
+      `http://localhost:8080/oauth2/authorization/google?redirect=${redirect}`;
   };
 
   return (
@@ -63,14 +69,37 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
- 
+
         {error && (
-          <div style={{ color: "#ed4245", fontSize: "12px", marginBottom: "12px" }}>
+          <div style={{
+            color: "#ed4245",
+            fontSize: "12px",
+            marginBottom: "12px"
+          }}>
             {error}
           </div>
         )}
 
         <button className="btn btn-primary">로그인</button>
+
+        {/* 🔥 구분선 */}
+        <div style={{
+          margin: "16px 0",
+          textAlign: "center",
+          color: "#999",
+          fontSize: "12px"
+        }}>
+          또는
+        </div>
+
+        {/* 🔥 Google 로그인 버튼 */}
+        <button
+          type="button"
+          className="btn btn-google"
+          onClick={handleGoogleLogin}
+        >
+          Google로 로그인
+        </button>
 
         <button
           type="button"

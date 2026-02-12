@@ -11,6 +11,7 @@ import ServerSettings from "./components/ServerSettings";
 import ServerSidebar from "./components/ServerSidebar";
 import ProfileSettings from "./components/ProfileSettings";
 import ProfileSettingsPage from "./pages/ProfileSettingPage";
+import OAuthSuccess from "./auth/OAuthSuccess";
 
 const PrivateRoute = ({ children }) =>
   isAuthenticated() ? children : <Navigate to="/login" replace />;
@@ -30,6 +31,8 @@ function App() {
         <Route path="/invite/:code" element={<InvitePage />} />
         <Route path="/channels/:serverId/settings" element={<ServerSettings />} />
         <Route path="/settings/profile" element={<ProfileSettingsPage />} />
+
+        <Route path="/oauth-success" element={<OAuthSuccess />} />
 
 
         {/* 서버 목록 */}

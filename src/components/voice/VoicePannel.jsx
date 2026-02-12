@@ -12,7 +12,6 @@ export default function VoiceChannel({ channel, onLeave }) {
   } = useVoiceRoom(channel.id);
 
   const handleLeave = () => {
-    console.log(users);
     leaveRoom();
     onLeave?.();
   };
@@ -22,7 +21,7 @@ export default function VoiceChannel({ channel, onLeave }) {
       {/* 채널 정보 */}
       <div className="voice-panel-header">
         <div className="voice-channel-name">
-          🔊 {channel.name}
+           {channel.name}
         </div>
         <button className="voice-leave-btn" onClick={handleLeave}>
           ✕
