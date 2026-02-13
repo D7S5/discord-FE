@@ -172,11 +172,10 @@ function MessageItem({ message, onImageClick }) {
   const isMe = String(message.senderId) === String(myUserId);
 
   const goProfileSettings = () => {
-  console.log("🔥 avatar click", {
-    senderId: message.senderId,
-    myUserId,
-  });
-
+  // console.log("🔥 avatar click", {
+  //   senderId: message.senderId,
+  //   myUserId,
+  // });
   if (isMe) {
     navigate("/settings/profile");
   }

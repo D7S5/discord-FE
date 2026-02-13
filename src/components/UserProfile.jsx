@@ -17,7 +17,6 @@ export default function UserProfile({ }) {
   useEffect(() => {
     api.get(`/users/me`)
       .then((res) => {
-        console.log(res);
         setProfileImage(res.data.iconUrl);
         setUsername(res.data.username);
         setStatus(res.data.statusMessage ?? "");
