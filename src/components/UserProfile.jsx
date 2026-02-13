@@ -92,6 +92,14 @@ export default function UserProfile({ }) {
             )}
           </div>
         </div>
+        <button
+            className="close-btn"
+            onClick={() => navigate(-1)}
+          >
+            ✕
+          </button>
+
+          <div className="profile-editor-layout"></div>
       </div>
 
       {/* ===== 이미지 변경 모달 ===== */}
@@ -103,5 +111,6 @@ export default function UserProfile({ }) {
         />
       )}
     </>
+    
   );
 }

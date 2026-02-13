@@ -119,9 +119,7 @@
 /* ===== 오른쪽 미리보기 카드 ===== */
 
 .profile-preview {
-  flex: 1;
-  display: flex;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
 .preview-card {
@@ -150,6 +148,26 @@
 .preview-status {
   font-size: 14px;
   color: #b5bac1;
+}
+
+.close-btn {
+  position: fixed;   /* 화면 기준 고정 */
+  top: 20px;
+  right: 30px;
+
+  background: none;
+  border: none;
+
+  font-size: 24px;
+  font-weight: bold;
+  color: #b9bbbe;
+
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: white;
 }
 
 
