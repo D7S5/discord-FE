@@ -1,9 +1,11 @@
 /* 전체 채널 페이지 */
 .channel-page {
+  flex: 1;     
+  min-width: 0;
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #313338; /* 디스코드 메인 배경 */
+  background-color: #313338;
   color: #dcddde;
 }
 .channel-content {
@@ -66,8 +68,9 @@
   object-fit: cover; 
   border-radius: 50%;
 }
-/* 메시지 본문 */
 .message-body {
+  flex: 1;     
+  min-width: 0;
   position: relative;
   z-index: 1;
 }
@@ -110,39 +113,27 @@
   opacity: 0.9;
 }
 
-/* ===== 메시지 입력 영역 ===== */
 .message-input {
+  padding: 16px;
   width: 100%;
-  flex-shrink: 0;
-
-  padding: 12px 16px;
-  background-color: #313338;
-  border-top: 1px solid #1f2023;
-
-  display: flex;
+  box-sizing: border-box;
 }
-/* textarea가 가로 전체 차지 */
-.message-input textarea {
-  flex: 1;
-  min-width: 0;
-  width: 100%;
 
+.message-input textarea {
+  width: 100%;     
+  max-width: 100%;  
   min-height: 44px;
-  max-height: 200px;
 
   resize: none;
-  padding: 10px 12px;
+  border-radius: 8px;
+  padding: 12px 14px;
 
   background-color: #383a40;
-  color: #dcddde;
-
+  color: white;
   border: none;
-  border-radius: 8px;
-  outline: none;
 
-  font-size: 15px;
+  box-sizing: border-box;
 }
-
 
 /* 포커스 */
 .message-input textarea:focus {
