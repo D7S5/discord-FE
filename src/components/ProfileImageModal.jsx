@@ -84,10 +84,13 @@ export default function ProfileImageModal({
             preview 
               ? preview
               : currentImage
-              ? `http://localhost:8080${currentImage}?t=${Date.now()}`
+              ? `http://localhost:8080${currentImage}`
               : "/default-avatar.png"
           }
           alt="preview"
+          onError={(e) => {
+            e.target.src = "/default-avatar.png";
+          }}
         />
 
         <label className="profile-upload-btn">
@@ -109,8 +112,8 @@ export default function ProfileImageModal({
           </button>
         )}
         
-
         <button
+
           className="profile-save-btn"
           disabled={!file}
           onClick={upload}
