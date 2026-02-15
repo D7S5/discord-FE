@@ -31,3 +31,26 @@
   background: #f04747;
   color: white;
 }
+
+.mute-btn {
+  background: #2f3136;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.mute-btn.active {
+  background:#2f3136;
+}
+
+.leave-btn {
+  background: #2f3136;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-left: 10px;
+  cursor: pointer;
+}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Device } from "mediasoup-client";
 import voiceApi from "../voiceApi";
-import { useSpeakingDetector } from "../hooks/useSpeakingDetector"; 
+import { useSpeakingDetector } from "../hooks/useSpeakingDetector";
 import { getClient } from "../websocket";
 
 export function useVoiceRoom(roomId) {
@@ -9,12 +9,16 @@ export function useVoiceRoom(roomId) {
   const [users, setUsers] = useState([]);
   const [stream, setStream] = useState(null);
 
+  const [muted, setMuted] = useState(false);
+
   const transportRef = useRef(null);
   const deviceRef = useRef(null);
+  const audioTrackRef = useRef(null);
+  const producerRef = useRef(null);
 
-  const speaking = useSpeakingDetector(stream);
+  const speakingRaw = useSpeakingDetector(stream);
+  const speaking = muted ? false : speakingRaw; // ✅ mute면 말하는 중도 false 취급
 
-  /* 🎧 음성 채널 입장 */
   const joinRoom = async () => {
     if (joined) return;
 
@@ -23,16 +27,12 @@ export function useVoiceRoom(roomId) {
 
     client.publish({
       destination: "/app/voice.join",
-      body: JSON.stringify({
-        channelId: roomId,
-      }),
+      body: JSON.stringify({ channelId: roomId }),
     });
 
-    // 🎤 2. 마이크 권한
     const media = await navigator.mediaDevices.getUserMedia({ audio: true });
     setStream(media);
 
-    // 3. RTP Capabilities
     const { data: rtpCapabilities } = await voiceApi.get(
       `/rooms/${roomId}/rtp-capabilities`
     );
@@ -41,7 +41,6 @@ export function useVoiceRoom(roomId) {
     await device.load({ routerRtpCapabilities: rtpCapabilities });
     deviceRef.current = device;
 
-    // 4. Transport 생성
     const { data: transportInfo } = await voiceApi.post(
       `/rooms/${roomId}/transports`
     );
@@ -50,9 +49,7 @@ export function useVoiceRoom(roomId) {
     transportRef.current = transport;
 
     transport.on("connect", async ({ dtlsParameters }, callback) => {
-      await voiceApi.post(`/transports/${transport.id}/connect`, {
-        dtlsParameters,
-      });
+      await voiceApi.post(`/transports/${transport.id}/connect`, { dtlsParameters });
       callback();
     });
 
@@ -65,32 +62,57 @@ export function useVoiceRoom(roomId) {
     });
 
     const track = media.getAudioTracks()[0];
-    await transport.produce({ track });
+    audioTrackRef.current = track;
+
+    // ✅ join 전에 muted 상태였으면 바로 적용
+    track.enabled = !muted;
+
+    const producer = await transport.produce({ track });
+    producerRef.current = producer;
 
     setJoined(true);
   };
 
-  /*@ 🚪 음성 채널 퇴장 */
   const leaveRoom = () => {
     const client = getClient();
 
     if (client?.connected) {
       client.publish({
         destination: "/app/voice.leave",
-        body: JSON.stringify({
-          channelId: roomId,
-        }),
+        body: JSON.stringify({ channelId: roomId }),
       });
     }
 
-    stream?.getTracks().forEach(t => t.stop());
+    producerRef.current?.close();
     transportRef.current?.close();
+    stream?.getTracks().forEach((t) => t.stop());
+
+    producerRef.current = null;
+    transportRef.current = null;
+    audioTrackRef.current = null;
 
     setStream(null);
     setJoined(false);
+    setMuted(false); // 선택: 나가면 mute 초기화
   };
 
-  /* 🟢 SPEAKING 이벤트 */
+  // ✅ mute 토글
+  const toggleMute = () => {
+    setMuted((prev) => {
+      const next = !prev;
+      const track = audioTrackRef.current;
+      if (track) track.enabled = !next; // next=true면 enabled=false
+      return next;
+    });
+  };
+
+  // ✅ 혹시 muted 상태가 바뀌었는데 track이 나중에 생기는 경우 대비
+  useEffect(() => {
+    const track = audioTrackRef.current;
+    if (track) track.enabled = !muted;
+  }, [muted]);
+
+  // 🟢 SPEAKING 이벤트 (mute면 false)
   useEffect(() => {
     if (!joined) return;
     const client = getClient();
@@ -102,16 +124,13 @@ export function useVoiceRoom(roomId) {
     });
   }, [speaking, joined, roomId]);
 
-  /* 👥 음성 채널 유저 목록 */
   useEffect(() => {
     const client = getClient();
     if (!client) return;
 
-    const sub = client.subscribe(
-      `/topic/voice/${roomId}`,
-      msg => setUsers(JSON.parse(msg.body))
+    const sub = client.subscribe(`/topic/voice/${roomId}`, (msg) =>
+      setUsers(JSON.parse(msg.body))
     );
-
     return () => sub.unsubscribe();
   }, [roomId]);
 
@@ -121,5 +140,8 @@ export function useVoiceRoom(roomId) {
     joined,
     users,
     speaking,
+    muted,
+    toggleMute,
+    setMuted, // 필요하면 외부에서 직접 제어
   };
 }

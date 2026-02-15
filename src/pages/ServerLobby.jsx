@@ -9,9 +9,9 @@ import VoiceChannelItem from "../components/voice/VoiceChannelItem";
 import ServerSidebar from "../components/ServerSidebar";
 import { connectWebSocket, getClient, safePublish } from "../websocket";
 import CreateChannelModal from "../components/CreateChannelModal";
-import VoicePannel from "../components/voice/VoicePannel";
 import "../styles/ServerLobby.css";
 import InviteModal from "./InviteModal";
+import VoiceChannel from "../components/voice/VoiceChannel";
 
 const ServerLobby = () => {
   const { serverId, channelId } = useParams();
@@ -210,7 +210,7 @@ const fetchMembers = async () => {
             ))}
         </div>
             {currentVoiceChannel && (
-            <VoicePannel
+            <VoiceChannel
               channel={currentVoiceChannel}
               users={voiceUsers[currentVoiceChannelId] || []}
               onLeave={() => {

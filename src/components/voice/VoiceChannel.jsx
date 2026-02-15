@@ -9,6 +9,8 @@ export default function VoiceChannel({ channel, onLeave }) {
     leaveRoom,
     joined,
     users,
+    muted,
+    toggleMute,
   } = useVoiceRoom(channel.id);
 
   const handleLeave = () => {
@@ -18,27 +20,24 @@ export default function VoiceChannel({ channel, onLeave }) {
 
   return (
     <div className="voice-panel">
-      {/* 채널 정보 */}
       <div className="voice-panel-header">
-        <div className="voice-channel-name">
-           {channel.name}
-        </div>
-        <button className="voice-leave-btn" onClick={handleLeave}>
-          ✕
-        </button>
+        <div className="voice-channel-name">{channel.name}</div>
+        <button className="voice-leave-btn" onClick={handleLeave}>✕</button>
       </div>
 
-      {/* 유저 목록 */}
       <VoiceUserList users={users} />
 
-      {/* 하단 컨트롤 */}
       <div className="voice-panel-controls">
         {!joined ? (
           <button className="voice-join-btn" onClick={joinRoom}>
             음성 참여
           </button>
         ) : (
-          <VoiceControls onLeave={handleLeave} />
+          <VoiceControls
+            muted={muted}
+            onToggleMute={toggleMute}
+            onLeave={handleLeave}
+          />
         )}
       </div>
     </div>
