@@ -12,6 +12,9 @@ import ServerSidebar from "./components/ServerSidebar";
 import ProfileSettings from "./components/ProfileSettings";
 import ProfileSettingsPage from "./pages/ProfileSettingPage";
 import OAuthSuccess from "./auth/OAuthSuccess";
+import TossSuccessPage from "./pages/TossSuccessPage";
+import TossFailPage from "./pages/TossFailPage";
+import ServerBillingPage from "./pages/ServerBillingPage";
 
 const PrivateRoute = ({ children }) =>
   isAuthenticated() ? children : <Navigate to="/login" replace />;
@@ -33,6 +36,10 @@ function App() {
         <Route path="/settings/profile" element={<ProfileSettingsPage />} />
 
         <Route path="/oauth-success" element={<OAuthSuccess />} />
+
+        <Route path="/servers/:serverId/billing" element={<ServerBillingPage />} />
+        <Route path="/billing/toss/success" element={<TossSuccessPage />} />
+        <Route path="/billing/toss/fail" element={<TossFailPage />} />
 
 
         {/* 서버 목록 */}

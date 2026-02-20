@@ -102,17 +102,17 @@ export function useVoiceRoom(roomId) {
       const next = !prev;
       const track = audioTrackRef.current;
       if (track) track.enabled = !next; // next=true면 enabled=false
+      // console.log("Track enabled:", track.enabled);
       return next;
     });
   };
 
-  // ✅ 혹시 muted 상태가 바뀌었는데 track이 나중에 생기는 경우 대비
   useEffect(() => {
     const track = audioTrackRef.current;
     if (track) track.enabled = !muted;
   }, [muted]);
 
-  // 🟢 SPEAKING 이벤트 (mute면 false)
+  // SPEAKING 이벤트 (mute면 false)
   useEffect(() => {
     if (!joined) return;
     const client = getClient();
@@ -142,6 +142,6 @@ export function useVoiceRoom(roomId) {
     speaking,
     muted,
     toggleMute,
-    setMuted, // 필요하면 외부에서 직접 제어
+    setMuted, 
   };
 }

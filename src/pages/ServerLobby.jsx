@@ -13,6 +13,8 @@ import "../styles/ServerLobby.css";
 import InviteModal from "./InviteModal";
 import VoiceChannel from "../components/voice/VoiceChannel";
 
+import ServerSettingsModal from "../components/ServerSettingsModal";
+
 const ServerLobby = () => {
   const { serverId, channelId } = useParams();
   const navigate = useNavigate();
@@ -32,6 +34,8 @@ const ServerLobby = () => {
 
   const [myRole, setMyRole] = useState(null);
   const roleAdmin = myRole === "OWNER" || myRole === "ADMIN";
+
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     if (!serverId) return 
@@ -157,6 +161,24 @@ const fetchMembers = async () => {
               </>
             )}
           <h2>{server.name}</h2>
+           {/* ✅ 서버 설정(⚙️) 버튼: OWNER/ADMIN만 */}
+                {roleAdmin && (
+                  <button
+                    className="server-settings-btn"
+                    onClick={() => setSettingsOpen(true)}
+                    title="Server Settings"
+                  >
+                    ⚙️
+                  </button>
+                )}
+                {settingsOpen && (
+                <ServerSettingsModal
+                  serverId={serverId}
+                  serverName={server.name}
+                  onClose={() => setSettingsOpen(false)}
+                />
+              )}
+
           {roleAdmin && (
             <>
           <button

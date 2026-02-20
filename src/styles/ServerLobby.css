@@ -118,3 +118,21 @@
   background: #3f4147;
   color: #ffffff;
 }
+
+.server-settings-btn {
+  margin-left: 8px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.06);
+  color: #f2f3f5;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.server-settings-btn:hover {
+  background: rgba(255,255,255,0.10);
+}
