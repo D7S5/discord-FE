@@ -4,7 +4,6 @@ import "../styles/ServerSettingsModal.css";
 
 export default function ServerSettingsModal({ serverId, serverName, onClose }) {
   const [active, setActive] = useState("OVERVIEW");
-   console.log("ServerSettingsModal rendered");
 
   return (
     <div className="ss-backdrop" onClick={onClose}>

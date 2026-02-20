@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 import api from "../api"; // 네 axios 인스턴스 경로에 맞춰 수정
 
+
 const TOSS_CLIENT_KEY = import.meta.env.VITE_TOSS_CLIENT_KEY; // CRA면 REACT_APP_*
 
 function bytesToMB(bytes) {
@@ -78,30 +79,46 @@ export default function BillingTab({ serverId, serverName }) {
   ];
 
   const startPayment = async (planCode) => {
-    setLoading(true);
-    setErr(null);
-    try {
-      // 1) 주문 생성 (서버에서 금액 결정)
-      const { data } = await api.post(`/servers/${serverId}/billing/orders`, { planCode });
-      const { orderId, amount } = data;
+  setLoading(true);
+  setErr(null);
 
-      // 2) 토스 결제창 호출
-      const tossPayments = await loadTossPayments(TOSS_CLIENT_KEY);
+  try {
+    // 1) 주문 생성
+    const { data } = await api.post(
+      `/servers/${serverId}/billing/orders`,
+      { planCode }
+    );
 
-      await tossPayments.requestPayment("CARD", {
-        amount,
-        orderId,
-        orderName: `${serverName} - ${planCode} Plan`,
-        customerName: "Discord Clone User",
-        successUrl,
-        failUrl,
-      });
-    } catch (e) {
-      setErr(e?.response?.data?.message || e?.message || "결제 시작에 실패했습니다.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const { orderId, amount } = data;
+
+    // 2) SDK 로드
+    const tossPayments = await loadTossPayments(TOSS_CLIENT_KEY);
+
+    // 3) payment 객체 생성 (v2 방식)
+    const payment = tossPayments.payment({
+      customerKey: "user-" + serverId // ⚠️ 실제론 유저 UUID 쓰는 게 가장 좋음
+    });
+
+    // 4) 결제 요청 (v2 형식)
+    await payment.requestPayment({
+      method: "CARD",
+      amount: {
+        value: Number(amount),
+        currency: "KRW",
+      },
+      orderId,
+      orderName: `${serverName} - ${planCode} Plan`,
+      successUrl,
+      failUrl,
+      customerName: "Discord Clone User",
+    });
+
+  } catch (e) {
+    setErr(e?.response?.data?.message || e?.message || "결제 시작에 실패했습니다.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const currentPlanCode = current?.planCode || "FREE";
   const currentLimits = current?.limits;
