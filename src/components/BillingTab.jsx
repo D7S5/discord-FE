@@ -3,7 +3,7 @@ import { loadTossPayments } from "@tosspayments/tosspayments-sdk";
 import api from "../api"; // 네 axios 인스턴스 경로에 맞춰 수정
 
 
-const TOSS_CLIENT_KEY = import.meta.env.VITE_TOSS_CLIENT_KEY; // CRA면 REACT_APP_*
+const TOSS_CLIENT_KEY = process.env.REACT_APP_TOSS_CLIENT_KEY;
 
 function bytesToMB(bytes) {
   if (bytes == null) return "-";
@@ -21,6 +21,7 @@ export default function BillingTab({ serverId, serverName }) {
 
   // 서버 현재 플랜 조회 (백엔드: GET /api/servers/{id}/billing/plan 같은 거 만들면 좋음)
   useEffect(() => {
+    console.log("TOSS_CLIENT_KEY:", TOSS_CLIENT_KEY);
     (async () => {
       try {
         setErr(null);
