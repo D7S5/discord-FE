@@ -51,10 +51,10 @@ export default function ServerSettings() {
     loadServer();
     setFile(null);
   } catch (e) {
-    console.error("[saveIcon] ERROR");
-    console.error("status =", e.response?.status);
-    console.error("data =", e.response?.data);
-    console.error("headers =", e.config?.headers);
+  //   console.error("[saveIcon] ERROR");
+  //   console.error("status =", e.response?.status);
+  //   console.error("data =", e.response?.data);
+  //   console.error("headers =", e.config?.headers);
   }
 };
 

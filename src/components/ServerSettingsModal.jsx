@@ -38,9 +38,8 @@ export default function ServerSettingsModal({ serverId, serverName, onClose }) {
               <p className="ss-muted">Server: <b>{serverName}</b></p>
               <div className="ss-card">
                 <div className="ss-card-title">Coming soon</div>
-                <div className="ss-card-desc">
-                  여기엔 서버 이름/아이콘 변경 같은 설정을 넣으면 돼.
-                </div>
+                {/* <div className="ss-card-desc">
+                </div> */}
               </div>
             </div>
           )}

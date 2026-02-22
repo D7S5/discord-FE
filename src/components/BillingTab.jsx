@@ -19,17 +19,14 @@ export default function BillingTab({ serverId, serverName }) {
   const successUrl = `${origin}/billing/toss/success`;
   const failUrl = `${origin}/billing/toss/fail`;
 
-  // 서버 현재 플랜 조회 (백엔드: GET /api/servers/{id}/billing/plan 같은 거 만들면 좋음)
   useEffect(() => {
     console.log("TOSS_CLIENT_KEY:", TOSS_CLIENT_KEY);
     (async () => {
       try {
         setErr(null);
-        // 없으면 그냥 FREE로 표시하게 fallback 처리해도 됨
         const { data } = await api.get(`/servers/${serverId}/billing/plan`);
         setCurrent(data);
       } catch (e) {
-        // 아직 API 없으면 여기서 FREE 기본값
         setCurrent({
           planCode: "FREE",
           status: "ACTIVE",
@@ -219,7 +216,6 @@ export default function BillingTab({ serverId, serverName }) {
       </div>
 
       <div className="ss-muted" style={{ marginTop: 12 }}>
-        Tip: “플랜 제한”은 반드시 백엔드에서 강제해야 해요 (멤버 초대/파일 업로드/음성 입장 등).
       </div>
     </div>
   );
