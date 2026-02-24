@@ -1,15 +1,15 @@
-/* 전체 @me 페이지 레이아웃 */
+/* 전체 페이지: ServerSidebar + me-sidebar + main + right panel */
 .me-layout {
   display: grid;
-  grid-template-columns: 240px 1fr 340px;
-  height: calc(100vh - 0px);
+  grid-template-columns: 72px 240px 1fr 340px;
+  height: 100vh;
   background: #313338;
   color: #dbdee1;
   min-width: 0;
 }
 
-/* ===== 왼쪽 DM 사이드바 ===== */
-.dm-sidebar {
+/* ===== 왼쪽 @me 사이드바 ===== */
+.me-sidebar {
   background: #2b2d31;
   border-right: 1px solid #1f2225;
   display: flex;
@@ -17,102 +17,70 @@
   min-width: 0;
 }
 
-.dm-search {
+.me-search {
   margin: 12px;
-  padding: 10px 12px;
+  height: 36px;
   border-radius: 8px;
   background: #1e1f22;
   color: #949ba4;
   font-size: 13px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.dm-nav {
-  padding: 0 8px 8px;
+/* Friends / Add Friend 상단 버튼 */
+.friends-header {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  gap: 8px;
+  padding: 0 12px 10px;
+  border-bottom: 1px solid #1f2225;
 }
 
-.dm-nav-item {
-  height: 36px;
+.friends-header button {
+  height: 28px;
   border: none;
+  border-radius: 6px;
+  padding: 0 10px;
   background: transparent;
   color: #b5bac1;
-  text-align: left;
-  border-radius: 8px;
-  padding: 0 10px;
   cursor: pointer;
   font: inherit;
+  font-size: 13px;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.dm-nav-item:hover {
-  background: #35373c;
-  color: #f2f3f5;
-}
-
-.dm-nav-item.active {
-  background: #404249;
-  color: #ffffff;
-}
-
-.dm-section-header {
-  margin: 8px 8px 6px;
-  padding: 0 6px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #949ba4;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-}
-
-.dm-add-btn {
-  width: 20px;
-  height: 20px;
-  border: none;
-  background: transparent;
-  color: #b5bac1;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.dm-add-btn:hover {
+.friends-header button:hover {
   background: #3a3c43;
   color: #fff;
 }
 
-.dm-list {
+.friends-header button.active {
+  background: #404249;
+  color: #fff;
+}
+
+.friends-header .add-friend {
+  background: #248046;
+  color: #fff;
+  margin-left: auto;
+}
+
+.friends-header .add-friend:hover {
+  background: #2ea75f;
+}
+
+/* DM 리스트 영역 */
+.dm-list-wrap {
   flex: 1;
-  overflow-y: auto;
-  padding: 0 8px 8px;
+  min-height: 0;
+  overflow: hidden; /* 내부 DmList에서 스크롤 */
 }
 
-.dm-item {
-  height: 42px;
-  border-radius: 8px;
-  margin-bottom: 6px;
-  background: #2b2d31;
-}
-
-.dm-item.skeleton {
-  background: linear-gradient(90deg, #2b2d31 0%, #32343a 50%, #2b2d31 100%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
-}
-
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-/* 하단 내 계정 패널 */
+/* 하단 계정 패널 (선택) */
 .me-user-panel {
   height: 52px;
   background: #232428;
@@ -128,11 +96,12 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #5865f2;
+  background: linear-gradient(180deg, #5865f2, #4752c4);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -141,16 +110,18 @@
 }
 
 .me-user-meta .name {
-  font-size: 13px;
   color: #f2f3f5;
+  font-size: 13px;
+  line-height: 1.1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .me-user-meta .status {
-  font-size: 12px;
   color: #949ba4;
+  font-size: 12px;
+  line-height: 1.1;
 }
 
 .me-user-actions {
@@ -162,9 +133,9 @@
   width: 28px;
   height: 28px;
   border: none;
+  border-radius: 6px;
   background: transparent;
   color: #b5bac1;
-  border-radius: 6px;
   cursor: pointer;
 }
 
@@ -173,27 +144,28 @@
   color: #fff;
 }
 
-/* ===== 중앙 메인 ===== */
-.me-main {
+/* ===== 중앙 메인 영역 ===== */
+.me-content {
   min-width: 0;
   display: flex;
   flex-direction: column;
   background: #313338;
 }
 
+/* 친구 화면 상단 탭바 */
 .friends-topbar {
   height: 48px;
   border-bottom: 1px solid #1f2225;
-  background: #313338;
   display: flex;
   align-items: center;
   padding: 0 12px;
+  background: #313338;
 }
 
 .friends-topbar-left {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
 }
 
@@ -205,7 +177,6 @@
 
 .friends-tabs {
   display: flex;
-  align-items: center;
   gap: 6px;
   flex-wrap: wrap;
 }
@@ -213,12 +184,14 @@
 .friends-tabs .tab {
   height: 30px;
   border: none;
+  border-radius: 6px;
+  padding: 0 10px;
   background: transparent;
   color: #b5bac1;
-  padding: 0 10px;
-  border-radius: 6px;
   cursor: pointer;
   font: inherit;
+  font-size: 13px;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .friends-tabs .tab:hover {
@@ -231,47 +204,59 @@
   color: #fff;
 }
 
-.friends-tabs .tab.add-friend {
+.friends-tabs .tab.add-friend-tab {
   background: #248046;
   color: #fff;
 }
 
-.friends-tabs .tab.add-friend:hover {
+.friends-tabs .tab.add-friend-tab:hover {
   background: #2ea75f;
 }
 
-.friends-main-content {
+/* 본문 */
+.me-content-body {
   flex: 1;
   min-height: 0;
-  overflow: hidden; /* 내부 FriendsViews가 스크롤 */
+  overflow: hidden; /* 내부 컴포넌트에서 스크롤 */
+}
+
+/* DM empty */
+.dm-empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #949ba4;
+  font-size: 14px;
 }
 
 /* ===== 오른쪽 활동 패널 ===== */
 .friends-right-panel {
-  background: #313338;
   border-left: 1px solid #1f2225;
+  background: #313338;
   padding: 16px;
 }
 
 .friends-right-panel h3 {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   color: #f2f3f5;
   font-size: 24px;
   font-weight: 800;
+  line-height: 1.2;
 }
 
 .activity-card {
   background: #2b2d31;
+  border: 1px solid rgba(255, 255, 255, 0.03);
   border-radius: 12px;
   padding: 16px;
-  border: 1px solid rgba(255,255,255,0.03);
 }
 
 .activity-title {
   margin: 0 0 8px;
   color: #fff;
-  font-weight: 700;
   font-size: 20px;
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -279,13 +264,13 @@
   margin: 0;
   color: #949ba4;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
-/* 반응형 (오른쪽 패널 숨김) */
-@media (max-width: 1200px) {
+/* ===== 반응형 ===== */
+@media (max-width: 1280px) {
   .me-layout {
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 72px 240px 1fr;
   }
 
   .friends-right-panel {
@@ -293,12 +278,12 @@
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   .me-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 72px 1fr;
   }
 
-  .dm-sidebar {
+  .me-sidebar {
     display: none;
   }
 }
