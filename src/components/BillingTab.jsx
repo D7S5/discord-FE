@@ -20,7 +20,6 @@ export default function BillingTab({ serverId, serverName }) {
   const failUrl = `${origin}/billing/toss/fail`;
 
   useEffect(() => {
-    console.log("TOSS_CLIENT_KEY:", TOSS_CLIENT_KEY);
     (async () => {
       try {
         setErr(null);

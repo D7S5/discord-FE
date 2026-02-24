@@ -1,97 +1,163 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api";
 import CreateServerModal from "../components/CreateServerModal";
 import ServerContextMenu from "../components/ServerContextMenu";
 import "../styles/ServerSidebar.css";
 
+const FILE_BASE_URL = "http://localhost:8080";
+
 export default function ServerSidebar() {
   const [servers, setServers] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [context, setContext] = useState(null);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [contextMenu, setContextMenu] = useState(null);
 
   const navigate = useNavigate();
   const { serverId } = useParams();
 
-  /** ⭐ 서버 목록 다시 로드 */
-  const reloadServers = async () => {
-    const res = await api.get("/channels/me");
-    setServers(res.data);
-  };
+  // 서버 목록 로드
+  const reloadServers = useCallback(async () => {
+    try {
+      const res = await api.get("/channels/me");
+      setServers(Array.isArray(res.data) ? res.data : []);
+    } catch (error) {
+      console.error("서버 목록 불러오기 실패:", error);
+      setServers([]);
+    }
+  }, []);
 
   useEffect(() => {
     reloadServers();
-  }, []);
+  }, [reloadServers]);
 
-  const onRightClick = (e, server) => {
+  const handleGoMe = () => {
+    navigate("/channels/@me");
+  };
+
+  const handleServerClick = (id) => {
+    navigate(`/channels/${id}`);
+  };
+
+  const handleOpenCreate = () => {
+    setIsCreateOpen(true);
+  };
+
+  const handleCloseCreate = () => {
+    setIsCreateOpen(false);
+  };
+
+  const handleRightClickServer = (e, server) => {
     e.preventDefault();
-    setContext({
+    setContextMenu({
       x: e.clientX,
       y: e.clientY,
       server,
     });
   };
 
+  const handleCloseContextMenu = () => {
+    setContextMenu(null);
+  };
+
+  const handleLeaveServer = (leftServerId) => {
+    setServers((prev) => prev.filter((s) => s.id !== leftServerId));
+    setContextMenu(null);
+    navigate("/channels/@me");
+  };
+
+  const handleServerUpdated = async () => {
+    await reloadServers();
+    setContextMenu(null);
+  };
+
   return (
     <>
       <aside className="server-sidebar">
-        {/* ===== @me ===== */}
+        {/* @me */}
         <div
           className={`server-icon me ${serverId === "@me" ? "active" : ""}`}
-          onClick={() => navigate("/channels/@me")}
+          onClick={handleGoMe}
           title="다이렉트 메시지"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") handleGoMe();
+          }}
         >
           🟣
         </div>
 
         <div className="server-separator" />
 
-        {/* ===== servers ===== */}
-        {servers.map((s) => (
-          <div
-            key={s.id}
-            className={`server-icon ${String(serverId) === String(s.id) ? "active" : ""}`}
-            onClick={() => navigate(`/channels/${s.id}`)}
-            onContextMenu={(e) => onRightClick(e, s)}
-            title={s.name}
-          >
-            {s.iconUrl ? (
-              <img
-                src={`http://localhost:8080${s.iconUrl}`}
-                alt={s.name}
-                className="server-icon-img"
-              />
-            ) : (
-              s.name?.[0]
-            )}
-          </div>
-        ))}
+        {/* 서버 목록 */}
+        {servers.map((server) => {
+          const isActive = String(serverId) === String(server.id);
+          const iconSrc = server.iconUrl
+            ? `${FILE_BASE_URL}${server.iconUrl}`
+            : null;
 
-        <div className="server-add" onClick={() => setOpen(true)}>
+          return (
+            <div
+              key={server.id}
+              className={`server-icon ${isActive ? "active" : ""}`}
+              onClick={() => handleServerClick(server.id)}
+              onContextMenu={(e) => handleRightClickServer(e, server)}
+              title={server.name}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  handleServerClick(server.id);
+                }
+              }}
+            >
+              {iconSrc ? (
+                <img
+                  src={iconSrc}
+                  alt={server.name}
+                  className="server-icon-img"
+                />
+              ) : (
+                server.name?.[0] ?? "?"
+              )}
+            </div>
+          );
+        })}
+
+        {/* 서버 추가 */}
+        <div
+          className="server-add"
+          onClick={handleOpenCreate}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") handleOpenCreate();
+          }}
+          title="서버 생성"
+        >
           +
         </div>
       </aside>
-      {context && (
+
+      {/* 컨텍스트 메뉴 */}
+      {contextMenu && (
         <ServerContextMenu
-          x={context.x}
-          y={context.y}
-          server={context.server}
-          onClose={() => setContext(null)}
-          onLeave={(id) => {
-            setServers((prev) => prev.filter((s) => s.id !== id));
-            navigate("/channels/@me");
-          }}
-          onUpdated={reloadServers}
+          x={contextMenu.x}
+          y={contextMenu.y}
+          server={contextMenu.server}
+          onClose={handleCloseContextMenu}
+          onLeave={handleLeaveServer}
+          onUpdated={handleServerUpdated}
         />
       )}
-
-      {/* ===== 서버 생성 ===== */}
-      {open && (
+      {/* 서버 생성 모달 */}
+      {isCreateOpen && (
         <CreateServerModal
-          onClose={() => setOpen(false)}
-          onCreated={() => reloadServers()}
+          onClose={handleCloseCreate}
+          onCreated={reloadServers}
         />
       )}
     </>
+    
   );
 }
