@@ -1,29 +1,237 @@
+/* 전체 영역 */
 .friends-view {
+  height: 100%;
   padding: 16px;
+  background: #313338; /* discord main */
+  color: #dbdee1;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
+/* 스크롤바 (웹킷) */
+.friends-view::-webkit-scrollbar {
+  width: 10px;
+}
+
+.friends-view::-webkit-scrollbar-track {
+  background: #2b2d31;
+  border-radius: 8px;
+}
+
+.friends-view::-webkit-scrollbar-thumb {
+  background: #1f2225;
+  border-radius: 8px;
+}
+
+.friends-view::-webkit-scrollbar-thumb:hover {
+  background: #191b1e;
+}
+
+/* 섹션 제목 */
 .friends-view h3 {
+  margin: 18px 0 10px;
   font-size: 12px;
-  color: var(--text-muted);
-  margin: 12px 0 8px;
+  font-weight: 700;
+  color: #949ba4;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.friend-row {
-  padding: 10px;
-  border-radius: 4px;
+.friends-view h3:first-of-type {
+  margin-top: 0;
+}
+
+/* 빈 상태 텍스트 */
+.empty {
+  margin: 8px 0 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #2b2d31;
+  color: #949ba4;
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* 에러 메시지 */
+.error-text {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(237, 66, 69, 0.12);
+  border: 1px solid rgba(237, 66, 69, 0.2);
+  color: #ff8a8a;
+  font-size: 13px;
+}
+
+/* 섹션 헤더 (Friend Requests + Updating...) */
+.friends-section-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 8px;
+}
+
+/* 공통 행 스타일 */
+.friend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  width: 100%;
+  min-height: 52px;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+
+  background: #2b2d31;
+  border: 1px solid transparent;
+  border-radius: 12px;
+
+  color: #f2f3f5;
+  box-sizing: border-box;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease;
+}
+
+/* 친구 이름 */
+.friend-row > span:first-child {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f2f3f5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 클릭 가능한 친구 행 (DM 열기용) */
+.friend-row.clickable {
   cursor: pointer;
 }
 
-.friend-row:hover {
-  background: var(--hover);
+.friend-row.clickable:hover {
+  background: #34373c;
+  border-color: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
-.friend-row button {
-  background: var(--brand);
+.friend-row.clickable:active {
+  transform: translateY(0);
+}
+
+/* button으로 렌더링한 친구 행 */
+.friend-row-button {
   border: none;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 4px;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.friend-row-button:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+/* 요청 수락 버튼 */
+.friend-row button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  min-width: 78px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+
+  background: #248046; /* discord green */
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.friend-row button:hover:not(:disabled) {
+  background: #2ea75f;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(36, 128, 70, 0.28);
+}
+
+.friend-row button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.friend-row button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* DM row 안쪽 로딩 텍스트 */
+.mini-loading {
+  font-size: 12px;
+  color: #b5bac1;
+  white-space: nowrap;
+}
+
+/* 키보드 포커스 접근성 */
+.friend-row-button:focus-visible,
+.friend-row button:focus-visible {
+  outline: 2px solid #5865f2;
+  outline-offset: 2px;
+}
+
+/* 살짝 구분선 느낌 (섹션 사이 여유) */
+.friends-view h3 + .empty,
+.friends-view h3 + .friend-row,
+.friends-section-header + .empty,
+.friends-section-header + .friend-row {
+  margin-top: 2px;
+}
+
+/* 모바일/좁은 화면 대응 */
+@media (max-width: 480px) {
+  .friends-view {
+    padding: 12px;
+  }
+
+  .friend-row {
+    min-height: 48px;
+    padding: 9px 10px;
+    border-radius: 10px;
+  }
+
+  .friend-row button {
+    min-width: 70px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
+.friend-row.clickable {
+  position: relative;
+  overflow: hidden;
+}
+
+.friend-row.clickable::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 999px;
+  background: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.friend-row.clickable:hover::before {
+  background: #5865f2;
 }

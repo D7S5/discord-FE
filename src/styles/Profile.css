@@ -47,11 +47,24 @@
   transform: scale(1.05);
 }
 .profile-avatar {
-  width: 48px;
-  height: 48px;
+  width: 72px;          /* 네 UI에 맞게 조절 */
+  height: 72px;
   border-radius: 50%;
-  padding: 4px;
-  background: linear-gradient(135deg, #5865f2, #404eed);
+  object-fit: cover;
+  cursor: pointer;
+  display: block;
+}
+
+.profile-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #5865f2;  /* 디스코드 느낌 */
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  user-select: none;
+  text-transform: uppercase;
 }
 
 .profile-avatar img {
@@ -152,3 +165,5 @@
     transform: scale(1);
   }
 }
+
+
