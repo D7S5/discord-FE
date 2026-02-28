@@ -63,6 +63,7 @@ export default function ChannelPage({ channel }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [previewImage]);
 
+  
   // 텍스트 전송
   const sendText = () => {
     if (!content.trim() || !channel) return;
@@ -165,6 +166,8 @@ export default function ChannelPage({ channel }) {
 
 /* ================= MessageItem ================= */
 
+
+
 function MessageItem({ message, onImageClick }) {
   const navigate = useNavigate();
 
@@ -172,20 +175,29 @@ function MessageItem({ message, onImageClick }) {
   const isMe = String(message.senderId) === String(myUserId);
 
   const goProfileSettings = () => {
-  // console.log("🔥 avatar click", {
-  //   senderId: message.senderId,
-  //   myUserId,
-  // });
   if (isMe) {
     navigate("/settings/profile");
   }
 };
 
+  const resolveFileUrl = (url) => {
+    if (!url || url === "null" || url === "undefined") return null;
+    if (url.startsWith("http://") || url.startsWith("https://")) return url;
+    return `http://localhost:8080${url}`;
+  };
 
-  const isImage = message.content?.startsWith("/images/chat");
-  const imageUrl = isImage
-    ? `http://localhost:8080${message.content}`
-    : null;
+  const isImageUrl = (url) => {
+    if (!url) return false;
+    if (url.startsWith("/images/chat")) return true;
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return /\.(png|jpg|jpeg|gif|webp|bmp|svg)$/i.test(url);
+    }
+    return false;
+  };
+  
+  const isImage = isImageUrl(message.content);
+  const imageUrl = isImage ? resolveFileUrl(message.content) : null;
+  const senderAvatarUrl = resolveFileUrl(message.senderIconUrl);
 
   return (
     <div className="message-item">
@@ -195,7 +207,7 @@ function MessageItem({ message, onImageClick }) {
       >
         {message.senderIconUrl ? (
           <img
-            src={`http://localhost:8080${message.senderIconUrl}`}
+            src={senderAvatarUrl}
             className="avatar-image"
             alt="avatar"
           />

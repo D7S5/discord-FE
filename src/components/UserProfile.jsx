@@ -3,27 +3,27 @@ import ProfileAvatar from "./ProfileAvatar";
 import ProfileImageModal from "./ProfileImageModal";
 import api from "../api";
 import "../styles/ProfileSettings.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function UserProfile({ }) {
+export default function UserProfile() {
   const [open, setOpen] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState("");
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
+    console.log(imageSrc)
     api.get(`/users/me`)
       .then((res) => {
         setProfileImage(res.data.iconUrl);
         setUsername(res.data.username);
         setStatus(res.data.statusMessage ?? "");
       })
-      .catch((err) =>
-        console.error("유저 정보 불러오기 실패", err)
-      );
+      .catch((err) => {
+        console.error("유저 정보 불러오기 실패", err);
+      });
   }, []);
 
   const saveProfile = async () => {
@@ -31,10 +31,9 @@ export default function UserProfile({ }) {
       await api.patch(`/users/me/profile`, {
         username,
         status,
-      });      
+      });
       alert("프로필 저장 완료");
-      
-    navigate(-1);
+      navigate(-1);
     } catch (e) {
       alert("프로필 저장 실패");
     }
@@ -42,8 +41,8 @@ export default function UserProfile({ }) {
 
   const imageSrc = profileImage
     ? profileImage.startsWith("http")
-    ? profileImage
-    : `http://localhost:8080${profileImage}`
+      ? profileImage
+      : `http://localhost:8080${profileImage}`
     : "/default-avatar.png";
 
   return (
@@ -52,7 +51,7 @@ export default function UserProfile({ }) {
         <div className="profile-editor-form">
           <div className="avatar-edit-row">
             <ProfileAvatar
-              imageUrl={profileImage}
+              imageUrl={imageSrc}
               onClick={() => setOpen(true)}
             />
             <span className="avatar-edit-text">
@@ -78,31 +77,26 @@ export default function UserProfile({ }) {
           </button>
         </div>
 
-        {/* ===== 오른쪽 미리보기 ===== */}
         <div className="profile-preview">
           <div className="preview-card">
             <img
-              src={imageSrc
-              }
+              src={imageSrc}
               className="preview-avatar"
+              alt="프로필 이미지"
             />
             <div className="preview-name">{username}</div>
-            {status && (
-              <div className="preview-status">{status}</div>
-            )}
+            {status && <div className="preview-status">{status}</div>}
           </div>
         </div>
-        <button
-            className="close-btn"
-            onClick={() => navigate(-1)}
-          >
-            ✕
-          </button>
 
-          <div className="profile-editor-layout"></div>
+        <button
+          className="close-btn"
+          onClick={() => navigate(-1)}
+        >
+          ✕
+        </button>
       </div>
 
-      {/* ===== 이미지 변경 모달 ===== */}
       {open && (
         <ProfileImageModal
           currentImage={profileImage}
@@ -111,6 +105,5 @@ export default function UserProfile({ }) {
         />
       )}
     </>
-    
   );
 }

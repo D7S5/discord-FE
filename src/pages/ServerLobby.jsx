@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getServerLobby } from "../api/serverApi";
-import api from "../api"; // ✅ 추가
+import api from "../api"; 
 import ChannelItem from "../components/ChannelItem";
 import ChannelPage from "./ChannelPage";
 import MemberList from "../components/MemberList";
@@ -161,7 +161,6 @@ const fetchMembers = async () => {
               </>
             )}
           <h2>{server.name}</h2>
-           {/* ✅ 서버 설정(⚙️) 버튼: OWNER/ADMIN만 */}
                 {roleAdmin && (
                   <button
                     className="server-settings-btn"

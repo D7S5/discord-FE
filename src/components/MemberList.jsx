@@ -127,8 +127,10 @@ function MemberItem({
   const isAdmin = member.role === "ADMIN";
 
   const avatarUrl = member.iconUrl
-    ? `http://localhost:8080${member.iconUrl}`
-    : null;
+  ? member.iconUrl.startsWith("http")
+    ? member.iconUrl
+    : `http://localhost:8080${member.iconUrl}`
+  : null;
 
   return (
     <div

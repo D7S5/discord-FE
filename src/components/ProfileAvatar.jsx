@@ -8,14 +8,19 @@ export default function ProfileAvatar({ imageUrl, username, onClick }) {
     return (username?.trim()?.[0] || "?").toUpperCase();
   }, [username]);
 
-  // "null", "undefined", 빈문자열 방어
   const hasValidImage =
     !!imageUrl &&
     imageUrl !== "null" &&
     imageUrl !== "undefined" &&
     imageUrl.trim() !== "";
 
-  const src = hasValidImage ? `http://localhost:8080${imageUrl}` : null;
+  const src = hasValidImage
+    ? imageUrl.startsWith("http")
+      ? imageUrl
+      : imageUrl.startsWith("/default-avatar")
+        ? imageUrl
+        : `http://localhost:8080${imageUrl}`
+    : "/default-avatar.png";
 
   const showImage = !!src && !imgError;
 
