@@ -93,7 +93,9 @@ export default function ServerSidebar() {
         {servers.map((server) => {
           const isActive = String(serverId) === String(server.id);
           const iconSrc = server.iconUrl
-            ? `${FILE_BASE_URL}${server.iconUrl}`
+            ? server.iconUrl.startsWith("http")
+            ? server.iconUrl
+            : `${FILE_BASE_URL}${server.iconUrl}`
             : null;
 
           return (

@@ -54,3 +54,42 @@ button.danger {
 button.primary {
   background: #3ba55d;
 }
+
+.server-settings {
+  position: relative;
+  padding: 24px 24px 28px;
+}
+
+.server-settings-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #b5bac1;
+
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.server-settings-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.server-settings h2 {
+  margin: 0 40px 20px 0;
+}
