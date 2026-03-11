@@ -4,12 +4,12 @@ axios.defaults.withCredentials = true;
 
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "/api",
   withCredentials: true,
 });
 
 const refreshApi = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "/api",
   withCredentials: true,
 });
 

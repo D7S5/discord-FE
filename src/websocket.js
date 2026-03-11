@@ -67,8 +67,7 @@ export const connectWebSocket = (onConnect, overrideToken) => {
   connecting = true;
 
   client = new Client({
-    webSocketFactory: () =>
-      new SockJS("http://localhost:8080/ws"),
+    webSocketFactory: () => new SockJS("/ws"),
 
     connectHeaders: {
       Authorization: `Bearer ${token}`,
