@@ -4,6 +4,7 @@ import api from "../api";
 import CreateServerModal from "../components/CreateServerModal";
 import ServerContextMenu from "../components/ServerContextMenu";
 import "../styles/ServerSidebar.css";
+import dmIcon from "../assets/dm-icon.svg";
 
 const FILE_BASE_URL = "http://localhost:8080";
 
@@ -84,7 +85,7 @@ export default function ServerSidebar() {
             if (e.key === "Enter" || e.key === " ") handleGoMe();
           }}
         >
-          🟣
+          <img src={dmIcon} alt="DM" className="server-icon-image" />
         </div>
 
         <div className="server-separator" />

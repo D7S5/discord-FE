@@ -107,7 +107,6 @@ export default function MePage() {
         </section>
       </main>
 
-      {/* 4) 오른쪽 활동 패널 (친구 화면일 때만) */}
       {view === "friends" && (
         <aside className="friends-right-panel">
           <h3>현재 활동 중</h3>

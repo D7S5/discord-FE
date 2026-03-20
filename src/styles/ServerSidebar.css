@@ -198,3 +198,21 @@
 .server-add {
   line-height: 1;
 }
+
+.server-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #2f3136;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.server-icon-image {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+}
